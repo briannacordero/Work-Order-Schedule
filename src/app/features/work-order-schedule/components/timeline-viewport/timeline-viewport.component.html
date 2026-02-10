@@ -22,11 +22,12 @@
             <div class="timeline__row" *ngFor="let wc of workCenters">
               <div class="timeline__cell" *ngFor="let col of columns"></div>
               <app-work-order-bar
-              *ngFor="let order of getOrdersForCenter(wc.id)"
+              *ngFor="let order of getOrdersForCenter(wc.id); trackBy: trackByOrderId"
               [order]="order"
               [left]="getLeft(order)"
-              [width]="getWidth(order)"
-            ></app-work-order-bar>
+              (edit)="onEditOrder($event)"
+              (delete)="onDeleteOrder($event)"
+              ></app-work-order-bar>                    
             </div>
           </div>
         </div>

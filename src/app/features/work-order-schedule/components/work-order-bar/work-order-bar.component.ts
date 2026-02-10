@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, HostListener, Input, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { WorkOrder } from '../../../../models/work-order.model';
 
@@ -13,4 +13,30 @@ export class WorkOrderBarComponent {
   @Input() order!: WorkOrder;
   @Input() left = 0;
   @Input() width = 0;
+
+  @Output() edit = new EventEmitter<WorkOrder>();
+  @Output() delete = new EventEmitter<WorkOrder>();
+
+  @HostListener('document:click')
+  closeMenu() {
+    this.menuOpen = false;
+  }
+
+
+  menuOpen = false;
+
+  toggleMenu(event: MouseEvent) {
+    event.stopPropagation();
+    this.menuOpen = !this.menuOpen;
+  }
+
+  onEdit() {
+    this.menuOpen = false;
+    this.edit.emit(this.order);
+  }
+
+  onDelete() {
+    this.menuOpen = false;
+    this.delete.emit(this.order);
+  }
 }

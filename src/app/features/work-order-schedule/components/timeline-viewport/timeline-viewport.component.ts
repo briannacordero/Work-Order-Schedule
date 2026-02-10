@@ -29,6 +29,21 @@ export class TimelineViewportComponent implements OnChanges {
     this.build();
   }
 
+  onEditOrder(order: WorkOrder) {
+    console.log('Edit clicked:', order);
+    alert(`Edit clicked: ${order.name}`);
+  }
+  
+  
+  onDeleteOrder(order: WorkOrder) {
+    this.orders = this.orders.filter(o => o.id !== order.id);
+  }
+
+  trackByOrderId(_: number, order: WorkOrder) {
+    return order.id;
+  }
+  
+
   ngOnChanges() {
     this.build();
   }
@@ -45,26 +60,26 @@ export class TimelineViewportComponent implements OnChanges {
   }
 
   getLeft(order: WorkOrder): number {
-    return this.timeline.dateToX(
-      new Date(order.startDate),
-      this.columns,
-      this.colWidth
-    );
-  }
-
-  getWidth(order: WorkOrder): number {
     const startX = this.timeline.dateToX(
       new Date(order.startDate),
       this.columns,
       this.colWidth
     );
+    return Math.max(startX, 0);
+  }
 
-    const endX = this.timeline.dateToX(
-      new Date(order.endDate),
-      this.columns,
-      this.colWidth
-    );
+  getWidth(order: WorkOrder): number {
+    const start = new Date(order.startDate);
 
-    return Math.max(endX - startX, this.colWidth * 0.5);
+    const endExclusive = new Date(order.endDate);
+    endExclusive.setDate(endExclusive.getDate() + 1);
+
+    const startX = this.timeline.dateToX(start, this.columns, this.colWidth);
+    const endX = this.timeline.dateToX(endExclusive, this.columns, this.colWidth);
+
+    if (startX < 0 || endX < 0) {
+      return this.colWidth; // fallback
+    }
+    return Math.max(endX - startX, this.colWidth);
   }
 }

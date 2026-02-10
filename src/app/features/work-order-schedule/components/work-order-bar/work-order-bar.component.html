@@ -1,8 +1,23 @@
 <div
   class="bar"
-  [class]="'status-' + order.status"
+  [ngClass]="'status-' + order.status"
   [style.left.px]="left"
-  [style.width.px]="width"
->
+  >
+  <!-- [style.width.px]="width" -->
+  
   <span class="bar__label">{{ order.name }}</span>
+
+  <button
+    class="bar__menuBtn"
+    type="button"
+    (click)="toggleMenu($event)"
+    aria-label="Actions"
+  >
+    •••
+  </button>
+
+  <div class="bar__menu" *ngIf="menuOpen">
+    <button type="button" (click)="onEdit()">Edit</button>
+    <button type="button" class="danger" (click)="onDelete()">Delete</button>
+  </div>
 </div>

@@ -1,5 +1,5 @@
 $leftWidth: 220px;
-$rowHeight: 44px;
+$rowHeight: 80px;
 $headerHeight: 38px;
 $colWidth: 80px;
 
@@ -86,6 +86,7 @@ $colWidth: 80px;
 }
 
 .timeline__cell {
+  width: 80px;
   border-right: 1px solid #f3f4f6;
   display: flex;
   align-items: center;
