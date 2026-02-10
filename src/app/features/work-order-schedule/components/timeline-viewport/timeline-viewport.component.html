@@ -1,0 +1,30 @@
+<div class="timeline">
+    <div class="timeline__left">
+      <div class="timeline__leftHeader">Work Center</div>
+  
+      <div class="timeline__leftRows">
+        <div class="timeline__leftRow" *ngFor="let wc of workCenters">
+          {{ wc }}
+        </div>
+      </div>
+    </div>
+  
+    <div class="timeline__right">
+      <div class="timeline__scroll">
+        <div class="timeline__scrollContent">
+          <div class="timeline__header">
+            <div class="timeline__cell" *ngFor="let col of columns">
+              {{ col.label }}
+            </div>
+          </div>
+      
+          <div class="timeline__rows">
+            <div class="timeline__row" *ngFor="let wc of workCenters">
+              <div class="timeline__cell" *ngFor="let col of columns"></div>
+            </div>
+          </div>
+        </div>
+      </div>      
+    </div>
+  </div>
+  

@@ -1,0 +1,10 @@
+.timescale-select {
+    width: 120px;
+  
+    ::ng-deep .ng-select-container {
+      min-height: 32px;
+      border-radius: 8px;
+      font-size: 13px;
+    }
+  }
+  

@@ -1,0 +1,26 @@
+.page {
+    padding: 24px;
+  }
+  
+  .page__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 16px;
+  }
+  
+  .page__title {
+    font-size: 20px;
+    font-weight: 600;
+    margin: 0;
+  }
+  
+  .fake-control {
+    height: 32px;
+    padding: 0 12px;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    background: white;
+    font-size: 13px;
+  }
+  
