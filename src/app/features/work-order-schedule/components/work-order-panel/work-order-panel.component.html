@@ -2,12 +2,15 @@
     <div class="backdrop" (click)="onBackdropClick()"></div>
   
     <aside class="panel" (click)="$event.stopPropagation()">
-      <app-work-order-form
+        <app-work-order-form
         [mode]="mode"
         [initial]="initial"
+        [workCenterId]="workCenterId"
+        [existingOrders]="existingOrders"
+        [prefillStartDateIso]="prefillStartDateIso"
         (cancel)="close.emit()"
         (submitForm)="save.emit($event)"
-      ></app-work-order-form>
+      ></app-work-order-form>      
     </aside>
   </div>
   

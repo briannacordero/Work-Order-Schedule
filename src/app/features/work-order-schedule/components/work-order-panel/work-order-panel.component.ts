@@ -16,6 +16,10 @@ export class WorkOrderPanelComponent {
   @Input() open = false;
   @Input() mode: Mode = 'create';
   @Input() initial?: WorkOrder;
+  @Input() workCenterId?: string;
+  @Input() existingOrders: WorkOrder[] = [];
+  @Input() prefillStartDateIso?: string;
+
 
   @Output() close = new EventEmitter<void>();
   @Output() save = new EventEmitter<WorkOrder>();

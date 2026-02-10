@@ -41,6 +41,10 @@ $colWidth: 80px;
 }
 
 /* RIGHT */
+.bar {
+  position: absolute;
+}
+
 .timeline__right {
   background: #fff;
   min-width: 0;
@@ -53,8 +57,8 @@ $colWidth: 80px;
 }
 
 .timeline__scrollContent {
-  width: max-content;
-  min-width: 100%;
+  position: relative;
+  min-width: max-content;
 }
 
 .timeline__header {
@@ -79,6 +83,7 @@ $colWidth: 80px;
   grid-auto-flow: column;
   grid-auto-columns: $colWidth;
   border-bottom: 1px solid #f3f4f6;
+  position: relative;
 
   &:hover {
     background: #f8fafc;

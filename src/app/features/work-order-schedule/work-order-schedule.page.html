@@ -9,15 +9,23 @@
   </header>
 
   <app-timeline-viewport
-    [timescale]="timescale"
-    (editOrder)="onEditOrder($event)"
+  [timescale]="timescale"
+  [orders]="orders"
+  (editOrder)="onEditOrder($event)"
+  (deleteOrder)="onDeleteOrder($event)"
+  (createOrder)="onCreateOrder($event)"
   ></app-timeline-viewport>
 
+
   <app-work-order-panel
-    [open]="panelOpen"
-    [mode]="panelMode"
-    [initial]="selectedOrder"
-    (close)="onClosePanel()"
-    (save)="onSaveOrder($event)"
+  [open]="panelOpen"
+  [mode]="panelMode"
+  [initial]="selectedOrder"
+  [workCenterId]="panelMode === 'create' ? createContext?.workCenterId : selectedOrder?.workCenterId"
+  [prefillStartDateIso]="createContext?.startDateIso"
+  [existingOrders]="orders"
+  (close)="onClosePanel()"
+  (save)="onSaveOrder($event)"
   ></app-work-order-panel>
+
 </div>

@@ -10,7 +10,7 @@
     </div>
   
     <div class="timeline__right">
-      <div class="timeline__scroll">
+      <div class="timeline__scroll" #timelineScroll>
         <div class="timeline__scrollContent">
           <div class="timeline__header">
             <div class="timeline__cell" *ngFor="let col of columns">
@@ -19,7 +19,7 @@
           </div>
       
           <div class="timeline__rows">
-            <div class="timeline__row" *ngFor="let wc of workCenters">
+            <div class="timeline__row" *ngFor="let wc of workCenters" (click)="onRowClick($event, wc)">
               <div class="timeline__cell" *ngFor="let col of columns"></div>
               <app-work-order-bar
               *ngFor="let order of getOrdersForCenter(wc.id); trackBy: trackByOrderId"

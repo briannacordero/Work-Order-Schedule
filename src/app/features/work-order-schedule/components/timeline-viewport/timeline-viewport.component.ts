@@ -1,9 +1,11 @@
-import { Component, Input, OnChanges, EventEmitter, Output } from '@angular/core';
+import { Component, Input, OnChanges, Output, EventEmitter } from '@angular/core';
+import { ViewChild, ElementRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import { TimelineService } from '../../../../core/services/timeline.service';
 import { TimelineColumn, Timescale } from '../../../../models/timeline.model';
 import { WorkOrder } from '../../../../models/work-order.model';
+import { WorkCenter } from '../../../../models/work-center.model';
 
 import { WORK_CENTERS, WORK_ORDERS } from '../../data/sample-data';
 
@@ -18,14 +20,20 @@ import { WorkOrderBarComponent } from '../work-order-bar/work-order-bar.componen
 })
 export class TimelineViewportComponent implements OnChanges {
   @Input() timescale: Timescale = 'day';
+  @Input() orders: WorkOrder[] = [...WORK_ORDERS];
+  workCenters = WORK_CENTERS;
 
   @Output() editOrder = new EventEmitter<WorkOrder>();
+  @Output() createOrder = new EventEmitter<{ workCenterId: string; startDateIso: string }>();
+  @Output() deleteOrder = new EventEmitter<WorkOrder>();
+
+
+  @ViewChild('timelineScroll') timelineScroll!: ElementRef<HTMLElement>;
+
 
   columns: TimelineColumn[] = [];
   colWidth = 80;
 
-  workCenters = WORK_CENTERS;
-  orders = WORK_ORDERS;
 
   constructor(private timeline: TimelineService) {
     this.build();
@@ -37,7 +45,7 @@ export class TimelineViewportComponent implements OnChanges {
   
   
   onDeleteOrder(order: WorkOrder) {
-    this.orders = this.orders.filter(o => o.id !== order.id);
+    this.deleteOrder.emit(order);
   }
 
   trackByOrderId(_: number, order: WorkOrder) {
@@ -53,6 +61,31 @@ export class TimelineViewportComponent implements OnChanges {
     this.columns = this.timeline.buildColumns(new Date(), this.timescale);
   }
 
+  private toISODate(d: Date): string {
+    return d.toISOString().slice(0, 10);
+  }
+  
+  onRowClick(event: MouseEvent, wc: WorkCenter) {
+    if (!this.timelineScroll) return;
+  
+    const scrollLeft = this.timelineScroll.nativeElement.scrollLeft;
+  
+    const rowEl = event.currentTarget as HTMLElement;
+    const rect = rowEl.getBoundingClientRect();
+    const xWithinRow = event.clientX - rect.left;
+  
+    const x = xWithinRow + scrollLeft;
+    const clickedDate = this.timeline.xToDate(x, this.columns, this.colWidth);
+  
+    this.createOrder.emit({
+      workCenterId: wc.id,
+      startDateIso: clickedDate.toISOString().slice(0, 10),
+    });
+
+    console.log('Row click create:', wc.id);
+
+  }  
+
 
   getOrdersForCenter(workCenterId: string): WorkOrder[] {
     return this.orders.filter(
@@ -60,13 +93,16 @@ export class TimelineViewportComponent implements OnChanges {
     );
   }
 
+  private startOfDay(d: Date): Date {
+    return new Date(d.getFullYear(), d.getMonth(), d.getDate());
+  }
+  
   getLeft(order: WorkOrder): number {
-    const startX = this.timeline.dateToX(
-      new Date(order.startDate),
-      this.columns,
-      this.colWidth
-    );
-    return Math.max(startX, 0);
+    const start = this.startOfDay(new Date(order.startDate));
+    const x = this.timeline.dateToX(start, this.columns, this.colWidth);
+  
+    // clamp so it never disappears completely
+    return Math.max(0, x);
   }
 
   getWidth(order: WorkOrder): number {

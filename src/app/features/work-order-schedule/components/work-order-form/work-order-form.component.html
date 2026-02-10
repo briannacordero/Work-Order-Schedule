@@ -1,5 +1,12 @@
 <div class="form">
     <div class="form__header">
+        <div class="alert alert-danger mt-2" *ngIf="form.touched && form.errors?.['endBeforeStart']">
+            End date must be on or after start date.
+        </div>
+        
+        <div class="alert alert-danger mt-2" *ngIf="form.touched && form.errors?.['overlap']">
+        This work order overlaps another order on the same work center.
+        </div>          
       <div>
         <h2 class="form__title">Work Order Details</h2>
         <p class="form__subtitle">Specify the details, dates, and status for this order</p>

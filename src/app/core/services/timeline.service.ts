@@ -25,20 +25,51 @@ export class TimelineService {
   }
 
   dateToX(date: Date, columns: { start: Date; end: Date }[], colWidth: number): number {
+    if (!columns.length) return 0;
+  
     const time = date.getTime();
+  
+    // Clamp before range
+    if (time <= columns[0].start.getTime()) return 0;
+  
+    // Clamp after range
+    const last = columns[columns.length - 1];
+    if (time >= last.end.getTime()) return columns.length * colWidth;
   
     for (let i = 0; i < columns.length; i++) {
       const col = columns[i];
-      if (time >= col.start.getTime() && time < col.end.getTime()) {
-        const ratio =
-          (time - col.start.getTime()) /
-          (col.end.getTime() - col.start.getTime());
+      const s = col.start.getTime();
+      const e = col.end.getTime();
+  
+      if (time >= s && time < e) {
+        const ratio = (time - s) / (e - s);
         return i * colWidth + ratio * colWidth;
       }
     }
   
-    return -1; // outside visible range
-  }  
+    // fallback (shouldn't hit)
+    return 0;
+  }
+   
+
+  xToDate(x: number, columns: { start: Date; end: Date }[], colWidth: number): Date {
+    if (!columns.length) return new Date();
+  
+    const totalWidth = columns.length * colWidth;
+    const clamped = Math.max(0, Math.min(x, totalWidth - 1));
+  
+    const index = Math.floor(clamped / colWidth);
+    const col = columns[Math.min(index, columns.length - 1)];
+    const within = clamped - index * colWidth;
+    const ratio = within / colWidth;
+  
+    const startMs = col.start.getTime();
+    const endMs = col.end.getTime();
+    const ms = startMs + ratio * (endMs - startMs);
+  
+    return new Date(ms);
+  }
+  
 }
 
 function buildDayColumns(start: Date, end: Date): TimelineColumn[] {

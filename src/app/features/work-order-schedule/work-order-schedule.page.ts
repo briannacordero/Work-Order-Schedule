@@ -4,7 +4,9 @@ import { TimescaleSelectComponent } from './components/timescale-select/timescal
 import { TimelineViewportComponent } from './components/timeline-viewport/timeline-viewport.component';
 import { WorkOrderPanelComponent } from './components/work-order-panel/work-order-panel.component';
 import { Timescale } from '../../models/timeline.model';
+import { WORK_ORDERS } from './data/sample-data';
 import { WorkOrder } from '../../models/work-order.model';
+import { rangesOverlapInclusive } from '../../core/utils/overlap.utils';
 
 @Component({
   standalone: true,
@@ -13,12 +15,26 @@ import { WorkOrder } from '../../models/work-order.model';
   templateUrl: './work-order-schedule.page.html',
   styleUrl: './work-order-schedule.page.scss',
 })
+
+
 export class WorkOrderSchedulePageComponent {
   timescale: Timescale = 'day';
+
+  orders: WorkOrder[] = [...WORK_ORDERS];
 
   panelOpen = false;
   panelMode: 'create' | 'edit' = 'create';
   selectedOrder?: WorkOrder;
+  createContext?: { workCenterId: string; startDateIso: string };
+
+  onCreateOrder(req: { workCenterId: string; startDateIso: string }) {
+    console.log('Create request received:', req);
+    this.panelMode = 'create';
+    this.selectedOrder = undefined;
+    this.createContext = req;
+    this.panelOpen = true;
+  }
+
 
   onTimescaleChange(scale: Timescale) {
     this.timescale = scale;
@@ -30,14 +46,23 @@ export class WorkOrderSchedulePageComponent {
     this.panelOpen = true;
   }
 
+  onDeleteOrder(order: WorkOrder) {
+    this.orders = this.orders.filter(o => o.id !== order.id);
+  }  
+
   onClosePanel() {
     this.panelOpen = false;
     this.selectedOrder = undefined;
+    this.createContext = undefined;
   }
 
+
   onSaveOrder(order: WorkOrder) {
-    console.log('Saved payload:', order);
-    // Next phase
+    if (this.panelMode === 'edit') {
+      this.orders = this.orders.map(o => (o.id === order.id ? { ...order } : o));
+    } else {
+      this.orders = [...this.orders, order];
+    }
     this.onClosePanel();
   }
 }
