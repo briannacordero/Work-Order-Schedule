@@ -1,0 +1,29 @@
+.bar {
+    position: absolute;
+    height: 28px;
+    border-radius: 6px;
+    padding: 0 8px;
+    display: flex;
+    align-items: center;
+    font-size: 12px;
+    color: #fff;
+    white-space: nowrap;
+    overflow: hidden;
+  }
+  
+  .status-open {
+    background: #3b82f6;
+  }
+  
+  .status-in-progress {
+    background: #6366f1;
+  }
+  
+  .status-complete {
+    background: #22c55e;
+  }
+  
+  .status-blocked {
+    background: #f59e0b;
+  }
+  

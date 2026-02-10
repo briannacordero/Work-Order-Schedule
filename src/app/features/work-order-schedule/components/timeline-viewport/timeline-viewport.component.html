@@ -4,7 +4,7 @@
   
       <div class="timeline__leftRows">
         <div class="timeline__leftRow" *ngFor="let wc of workCenters">
-          {{ wc }}
+          {{ wc.name }}
         </div>
       </div>
     </div>
@@ -21,6 +21,12 @@
           <div class="timeline__rows">
             <div class="timeline__row" *ngFor="let wc of workCenters">
               <div class="timeline__cell" *ngFor="let col of columns"></div>
+              <app-work-order-bar
+              *ngFor="let order of getOrdersForCenter(wc.id)"
+              [order]="order"
+              [left]="getLeft(order)"
+              [width]="getWidth(order)"
+            ></app-work-order-bar>
             </div>
           </div>
         </div>

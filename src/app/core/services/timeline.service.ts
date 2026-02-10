@@ -23,9 +23,23 @@ export class TimelineService {
     if (timescale === 'week') return buildWeekColumns(start, end);
     return buildMonthColumns(start, end);
   }
-}
 
-/** ---- helpers (kept simple + dependency-free) ---- */
+  dateToX(date: Date, columns: { start: Date; end: Date }[], colWidth: number): number {
+    const time = date.getTime();
+  
+    for (let i = 0; i < columns.length; i++) {
+      const col = columns[i];
+      if (time >= col.start.getTime() && time < col.end.getTime()) {
+        const ratio =
+          (time - col.start.getTime()) /
+          (col.end.getTime() - col.start.getTime());
+        return i * colWidth + ratio * colWidth;
+      }
+    }
+  
+    return -1; // outside visible range
+  }  
+}
 
 function buildDayColumns(start: Date, end: Date): TimelineColumn[] {
   const cols: TimelineColumn[] = [];
