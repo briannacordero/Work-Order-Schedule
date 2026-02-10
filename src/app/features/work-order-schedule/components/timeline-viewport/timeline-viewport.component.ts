@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges } from '@angular/core';
+import { Component, Input, OnChanges, EventEmitter, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import { TimelineService } from '../../../../core/services/timeline.service';
@@ -19,6 +19,8 @@ import { WorkOrderBarComponent } from '../work-order-bar/work-order-bar.componen
 export class TimelineViewportComponent implements OnChanges {
   @Input() timescale: Timescale = 'day';
 
+  @Output() editOrder = new EventEmitter<WorkOrder>();
+
   columns: TimelineColumn[] = [];
   colWidth = 80;
 
@@ -30,8 +32,7 @@ export class TimelineViewportComponent implements OnChanges {
   }
 
   onEditOrder(order: WorkOrder) {
-    console.log('Edit clicked:', order);
-    alert(`Edit clicked: ${order.name}`);
+    this.editOrder.emit(order);
   }
   
   

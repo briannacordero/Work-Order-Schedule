@@ -1,0 +1,53 @@
+<div class="form">
+    <div class="form__header">
+      <div>
+        <h2 class="form__title">Work Order Details</h2>
+        <p class="form__subtitle">Specify the details, dates, and status for this order</p>
+      </div>
+  
+      <div class="form__actions">
+        <button type="button" class="btn btn-link" (click)="onCancel()">Cancel</button>
+        <button type="button" class="btn btn-primary" (click)="onSubmit()">
+          {{ mode === 'edit' ? 'Save' : 'Create' }}
+        </button>
+      </div>
+    </div>
+  
+    <div class="form__field">
+      <label>Work Order Name</label>
+      <input class="form-control" type="text" [formControl]="form.controls.name" />
+      <small class="text-danger" *ngIf="form.controls.name.touched && form.controls.name.invalid">
+        Name is required.
+      </small>
+    </div>
+  
+    <div class="form__field">
+      <label>Status</label>
+      <ng-select
+        class="status-select"
+        [items]="statusOptions"
+        bindLabel="label"
+        bindValue="value"
+        [clearable]="false"
+        [searchable]="false"
+        [formControl]="form.controls.status"
+      ></ng-select>
+    </div>
+  
+    <div class="form__field">
+      <label>Start date</label>
+      <ngb-datepicker [formControl]="form.controls.startDate"></ngb-datepicker>
+      <small class="text-danger" *ngIf="form.controls.startDate.touched && form.controls.startDate.invalid">
+        Start date is required.
+      </small>
+    </div>
+  
+    <div class="form__field">
+      <label>End date</label>
+      <ngb-datepicker [formControl]="form.controls.endDate"></ngb-datepicker>
+      <small class="text-danger" *ngIf="form.controls.endDate.touched && form.controls.endDate.invalid">
+        End date is required.
+      </small>
+    </div>
+  </div>
+  

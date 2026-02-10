@@ -1,0 +1,32 @@
+.overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+  }
+  
+  .backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(17, 24, 39, 0.35);
+  }
+  
+  .panel {
+    position: absolute;
+    top: 0;
+    right: 0;
+    height: 100%;
+    width: 420px; // adjust to match Sketch
+    background: #fff;
+    border-left: 1px solid #e5e7eb;
+    box-shadow: -12px 0 30px rgba(0, 0, 0, 0.12);
+    overflow: auto;
+  
+    // simple slide-in
+    animation: slideIn 160ms ease-out;
+  }
+  
+  @keyframes slideIn {
+    from { transform: translateX(20px); opacity: 0.6; }
+    to { transform: translateX(0); opacity: 1; }
+  }
+  

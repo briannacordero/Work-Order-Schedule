@@ -1,0 +1,46 @@
+.form {
+    padding: 16px;
+  }
+  
+  .form__header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 12px;
+  }
+  
+  .form__title {
+    font-size: 16px;
+    font-weight: 600;
+    margin: 0;
+  }
+  
+  .form__subtitle {
+    font-size: 12px;
+    color: #6b7280;
+    margin: 4px 0 0;
+  }
+  
+  .form__actions {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+  }
+  
+  .form__field {
+    margin-top: 12px;
+  
+    label {
+      font-size: 12px;
+      font-weight: 600;
+      color: #374151;
+      display: block;
+      margin-bottom: 6px;
+    }
+  }
+  
+  ::ng-deep .status-select .ng-select-container {
+    min-height: 38px;
+  }
+  
