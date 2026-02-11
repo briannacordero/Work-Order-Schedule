@@ -3,20 +3,16 @@
   (click)="$event.stopPropagation()"
   [ngClass]="'status-' + order.status"
   [style.left.px]="left"
+  [style.width.px]="width"
 >
+  <span class="bar__name">{{ order.name }}</span>
 
-  <!-- [style.width.px]="width" -->
-  
-  <span class="bar__label">{{ order.name }}</span>
+  <div class="bar__right">
+    <span class="bar__status">{{ statusLabel }}</span>
 
-  <button
-    class="bar__menuBtn"
-    type="button"
-    (click)="toggleMenu($event)"
-    aria-label="Actions"
-  >
-    •••
-  </button>
+    <button class="bar__menuBtn" type="button" (click)="toggleMenu($event)">•••</button>
+
+  </div>
 
   <div class="bar__menu" *ngIf="menuOpen">
     <button type="button" (click)="onEdit()">Edit</button>

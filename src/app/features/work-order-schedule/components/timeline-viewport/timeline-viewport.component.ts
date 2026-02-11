@@ -22,11 +22,13 @@ export class TimelineViewportComponent implements OnChanges {
   @Input() timescale: Timescale = 'day';
   @Input() orders: WorkOrder[] = [...WORK_ORDERS];
   workCenters = WORK_CENTERS;
-
+  @Input() selectedWorkCenterId: string | null = null;
+  
   @Output() editOrder = new EventEmitter<WorkOrder>();
   @Output() createOrder = new EventEmitter<{ workCenterId: string; startDateIso: string }>();
   @Output() deleteOrder = new EventEmitter<WorkOrder>();
-
+  @Output() selectWorkCenter = new EventEmitter<string>();
+  
 
   @ViewChild('timelineScroll') timelineScroll!: ElementRef<HTMLElement>;
 
@@ -64,6 +66,10 @@ export class TimelineViewportComponent implements OnChanges {
   private toISODate(d: Date): string {
     return d.toISOString().slice(0, 10);
   }
+
+  onRowSelect(wcId: string) {
+    this.selectWorkCenter.emit(wcId);
+  }
   
   onRowClick(event: MouseEvent, wc: WorkCenter) {
     if (!this.timelineScroll) return;
@@ -93,30 +99,39 @@ export class TimelineViewportComponent implements OnChanges {
     );
   }
 
+  getRenderableOrdersForCenter(workCenterId: string) {
+    return this.getOrdersForCenter(workCenterId).filter(o => (o.name ?? '').trim().length > 0);
+  }  
+
   private startOfDay(d: Date): Date {
     return new Date(d.getFullYear(), d.getMonth(), d.getDate());
   }
   
-  getLeft(order: WorkOrder): number {
-    const start = this.startOfDay(new Date(order.startDate));
-    const x = this.timeline.dateToX(start, this.columns, this.colWidth);
-  
-    // clamp so it never disappears completely
-    return Math.max(0, x);
+  private parseIsoLocal(iso: string): Date {
+    const [y, m, d] = iso.split('-').map(Number);
+    return new Date(y, m - 1, d);
   }
-
+  
+  private addDays(d: Date, days: number): Date {
+    const x = new Date(d);
+    x.setDate(x.getDate() + days);
+    return x;
+  }
+   
+  
+  getLeft(order: WorkOrder): number {
+    const start = this.parseIsoLocal(order.startDate);
+    return this.timeline.dateToX(start, this.columns, this.colWidth);
+  }
+  
   getWidth(order: WorkOrder): number {
-    const start = new Date(order.startDate);
-
-    const endExclusive = new Date(order.endDate);
-    endExclusive.setDate(endExclusive.getDate() + 1);
-
+    const start = this.parseIsoLocal(order.startDate);
+    const endExclusive = this.addDays(this.parseIsoLocal(order.endDate), 1);
+  
     const startX = this.timeline.dateToX(start, this.columns, this.colWidth);
     const endX = this.timeline.dateToX(endExclusive, this.columns, this.colWidth);
-
-    if (startX < 0 || endX < 0) {
-      return this.colWidth; // fallback
-    }
-    return Math.max(endX - startX, this.colWidth);
-  }
+  
+    return Math.max(24, endX - startX);
+  }  
+  
 }

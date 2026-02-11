@@ -20,7 +20,7 @@ import { rangesOverlapInclusive } from '../../core/utils/overlap.utils';
 export class WorkOrderSchedulePageComponent {
   timescale: Timescale = 'day';
 
-  orders: WorkOrder[] = [...WORK_ORDERS];
+  orders: WorkOrder[] = [];
 
   panelOpen = false;
   panelMode: 'create' | 'edit' = 'create';
@@ -35,6 +35,26 @@ export class WorkOrderSchedulePageComponent {
     this.panelOpen = true;
   }
 
+  selectedWorkCenterId: string | null = null;
+
+  onSelectWorkCenter(workCenterId: string) {
+    // If there's already an order on that row, edit it (simple behavior for now)
+    const existing = this.orders.find(o => o.workCenterId === workCenterId);
+  
+    if (existing) {
+      this.onEditOrder(existing);
+      return;
+    }
+  
+    // Otherwise create a new one for that row
+    this.panelMode = 'create';
+    this.selectedOrder = undefined;
+    this.createContext = {
+      workCenterId,
+      startDateIso: new Date().toISOString().slice(0, 10),
+    };
+    this.panelOpen = true;
+  }  
 
   onTimescaleChange(scale: Timescale) {
     this.timescale = scale;

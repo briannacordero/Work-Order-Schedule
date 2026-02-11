@@ -40,6 +40,11 @@ $colWidth: 80px;
   border-bottom: 1px solid #f3f4f6;
 }
 
+.timeline__leftRow,
+.timeline__row {
+  cursor: pointer;
+}
+
 /* RIGHT */
 .bar {
   position: absolute;
@@ -59,6 +64,7 @@ $colWidth: 80px;
 .timeline__scrollContent {
   position: relative;
   min-width: max-content;
+  overflow: visible;
 }
 
 .timeline__header {
@@ -84,6 +90,7 @@ $colWidth: 80px;
   grid-auto-columns: $colWidth;
   border-bottom: 1px solid #f3f4f6;
   position: relative;
+  overflow: visible;
 
   &:hover {
     background: #f8fafc;
@@ -99,3 +106,23 @@ $colWidth: 80px;
   font-size: 11px;
   color: #6b7280;
 }
+
+.timeline__leftRow.is-selected,
+.timeline__row.is-selected {
+  background: #eef2ff; // light indigo-ish, tune to Sketch later
+}
+
+.row-empty-pill {
+  position: absolute;
+  left: 40%;
+  top: 8px;
+  height: 28px;
+  padding: 0 12px;
+  border-radius: 8px;
+  background: #e0e7ff;
+  color: #3730a3;
+  font-size: 12px;
+  display: inline-flex;
+  align-items: center;
+}
+

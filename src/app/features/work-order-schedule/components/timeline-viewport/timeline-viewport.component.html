@@ -3,10 +3,14 @@
       <div class="timeline__leftHeader">Work Center</div>
   
       <div class="timeline__leftRows">
-        <div class="timeline__leftRow" *ngFor="let wc of workCenters">
+        <div
+          class="timeline__leftRow"
+          *ngFor="let wc of workCenters"
+          (click)="onRowSelect(wc.id)"
+        >
           {{ wc.name }}
         </div>
-      </div>
+      </div>         
     </div>
   
     <div class="timeline__right">
@@ -19,17 +23,23 @@
           </div>
       
           <div class="timeline__rows">
-            <div class="timeline__row" *ngFor="let wc of workCenters" (click)="onRowClick($event, wc)">
+            <div
+              class="timeline__row"
+              *ngFor="let wc of workCenters"
+              (click)="onRowSelect(wc.id)"
+            >
               <div class="timeline__cell" *ngFor="let col of columns"></div>
+          
               <app-work-order-bar
-              *ngFor="let order of getOrdersForCenter(wc.id); trackBy: trackByOrderId"
-              [order]="order"
-              [left]="getLeft(order)"
-              (edit)="onEditOrder($event)"
-              (delete)="onDeleteOrder($event)"
-              ></app-work-order-bar>                    
+                *ngFor="let order of getRenderableOrdersForCenter(wc.id); trackBy: trackByOrderId"
+                [order]="order"
+                [left]="getLeft(order)"
+                [width]="getWidth(order)"
+                (edit)="onEditOrder($event)"
+                (delete)="onDeleteOrder($event)"
+              ></app-work-order-bar>
             </div>
-          </div>
+          </div>                  
         </div>
       </div>      
     </div>

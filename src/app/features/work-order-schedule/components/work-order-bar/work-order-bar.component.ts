@@ -22,7 +22,20 @@ export class WorkOrderBarComponent {
     this.menuOpen = false;
   }
 
+  @HostListener('document:click')
+  onDocClick() {
+    this.menuOpen = false;
+  }
 
+  get statusLabel(): string {
+    switch (this.order.status) {
+      case 'open': return 'Open';
+      case 'in-progress': return 'In progress';
+      case 'complete': return 'Complete';
+      case 'blocked': return 'Blocked';
+    }
+  }
+  
   menuOpen = false;
 
   toggleMenu(event: MouseEvent) {

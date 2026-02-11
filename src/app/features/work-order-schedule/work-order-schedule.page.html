@@ -11,9 +11,9 @@
   <app-timeline-viewport
   [timescale]="timescale"
   [orders]="orders"
+  (selectWorkCenter)="onSelectWorkCenter($event)"
   (editOrder)="onEditOrder($event)"
   (deleteOrder)="onDeleteOrder($event)"
-  (createOrder)="onCreateOrder($event)"
   ></app-timeline-viewport>
 
 
