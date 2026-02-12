@@ -38,7 +38,6 @@ export class WorkOrderSchedulePageComponent {
   selectedWorkCenterId: string | null = null;
 
   onSelectWorkCenter(workCenterId: string) {
-    // If there's already an order on that row, edit it (simple behavior for now)
     const existing = this.orders.find(o => o.workCenterId === workCenterId);
   
     if (existing) {
@@ -46,7 +45,6 @@ export class WorkOrderSchedulePageComponent {
       return;
     }
   
-    // Otherwise create a new one for that row
     this.panelMode = 'create';
     this.selectedOrder = undefined;
     this.createContext = {

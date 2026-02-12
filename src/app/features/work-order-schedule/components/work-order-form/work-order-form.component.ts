@@ -26,13 +26,25 @@ export class WorkOrderFormComponent implements OnChanges {
   @Input() existingOrders: WorkOrder[] = [];
   @Input() prefillStartDateIso?: string;
 
+  statusOptions = [
+    { value: 'open', label: 'Open' },
+    { value: 'in-progress', label: 'In progress' },
+    { value: 'complete', label: 'Complete' },
+    { value: 'blocked', label: 'Blocked' },
+  ] as const;  
 
-  statusOptions: { label: string; value: WorkOrderStatus }[] = [
-    { label: 'Open', value: 'open' },
-    { label: 'In Progress', value: 'in-progress' },
-    { label: 'Complete', value: 'complete' },
-    { label: 'Blocked', value: 'blocked' },
-  ];
+  statusLabel(s: WorkOrderStatus): string {
+    switch (s) {
+      case 'open':
+        return 'Open';
+      case 'in-progress':
+        return 'In progress';
+      case 'complete':
+        return 'Complete';
+      case 'blocked':
+        return 'Blocked';
+    }
+  }  
 
   form = new FormGroup({
     name: new FormControl<string>('', { nonNullable: true, validators: [Validators.required] }),
@@ -93,6 +105,35 @@ export class WorkOrderFormComponent implements OnChanges {
       return conflicts ? { overlap: true } : null;
     };
   }
+
+  private formatStruct(s: NgbDateStruct | null): string {
+    if (!s) return '';
+    const mm = String(s.month).padStart(2, '0');
+    const dd = String(s.day).padStart(2, '0');
+    const yyyy = String(s.year);
+    return `${mm}/${dd}/${yyyy}`;
+  }
+  
+  get startDisplay(): string {
+    return this.formatStruct(this.form.controls.startDate.value);
+  }
+  
+  get endDisplay(): string {
+    return this.formatStruct(this.form.controls.endDate.value);
+  }
+  
+  onStartPicked(date: NgbDateStruct) {
+    this.form.controls.startDate.setValue(date);
+    this.form.controls.startDate.markAsTouched();
+    // re-run form-level validators (end-after-start, overlap)
+    this.form.updateValueAndValidity();
+  }
+  
+  onEndPicked(date: NgbDateStruct) {
+    this.form.controls.endDate.setValue(date);
+    this.form.controls.endDate.markAsTouched();
+    this.form.updateValueAndValidity();
+  }  
   
 
   ngOnChanges(): void {

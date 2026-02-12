@@ -4,11 +4,25 @@ import { TimelineColumn, Timescale } from '../../models/timeline.model';
 @Injectable({ providedIn: 'root' })
 export class TimelineService {
 
+  private startOfDay(d: Date): Date {
+    return new Date(d.getFullYear(), d.getMonth(), d.getDate());
+  }
+
+  private addDays(d: Date, days: number): Date {
+    const copy = new Date(d);
+    copy.setDate(copy.getDate() + days);
+    return copy;
+  }
+
   getVisibleRange(center: Date, timescale: Timescale): { start: Date; end: Date } {
     // Pick reasonable defaults from the spec
     if (timescale === 'day') {
-      return { start: addDays(startOfDay(center), -14), end: addDays(startOfDay(center), 15) };
+      const today = new Date();
+      const start = this.startOfDay(this.addDays(today, -7));
+      const end = this.addDays(start, 14); // 7 before + 7 after
+      return { start, end };
     }
+    
     if (timescale === 'week') {
       return { start: addMonths(startOfMonth(center), -2), end: addMonths(startOfMonth(center), 3) };
     }
@@ -18,11 +32,12 @@ export class TimelineService {
 
   buildColumns(center: Date, timescale: Timescale): TimelineColumn[] {
     const { start, end } = this.getVisibleRange(center, timescale);
-
+  
     if (timescale === 'day') return buildDayColumns(start, end);
     if (timescale === 'week') return buildWeekColumns(start, end);
     return buildMonthColumns(start, end);
   }
+  
 
   dateToX(date: Date, columns: { start: Date; end: Date }[], colWidth: number): number {
     if (!columns.length) return 0;

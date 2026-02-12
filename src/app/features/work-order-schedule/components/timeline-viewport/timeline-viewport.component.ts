@@ -74,7 +74,7 @@ export class TimelineViewportComponent implements OnChanges {
   onRowClick(event: MouseEvent, wc: WorkCenter) {
     if (!this.timelineScroll) return;
   
-    const scrollLeft = this.timelineScroll.nativeElement.scrollLeft;
+    const scrollLeft = this.timelineScroll.nativeElement.scrollLeft = 0;
   
     const rowEl = event.currentTarget as HTMLElement;
     const rect = rowEl.getBoundingClientRect();
@@ -113,11 +113,10 @@ export class TimelineViewportComponent implements OnChanges {
   }
   
   private addDays(d: Date, days: number): Date {
-    const x = new Date(d);
-    x.setDate(x.getDate() + days);
-    return x;
+    const copy = new Date(d);
+    copy.setDate(copy.getDate() + days);
+    return copy;
   }
-   
   
   getLeft(order: WorkOrder): number {
     const start = this.parseIsoLocal(order.startDate);

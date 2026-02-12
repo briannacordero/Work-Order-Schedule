@@ -107,6 +107,32 @@ $colWidth: 80px;
   color: #6b7280;
 }
 
+.timeline__cell {
+  position: relative;
+  border-right: 1px solid #eef2f7; // whatever your grid line is
+  border-bottom: 1px solid #eef2f7;
+}
+
+.timeline__row:hover .timeline__cell:hover {
+  outline: 1px solid #93c5fd;     // hover border
+  outline-offset: -1px;
+  z-index: 2;
+}
+
+.timeline__row:hover .timeline__cell:hover::after {
+  content: "Click to add dates";
+  position: absolute;
+  top: -28px;
+  left: 6px;
+  background: #111827;
+  color: white;
+  font-size: 12px;
+  padding: 4px 8px;
+  border-radius: 6px;
+  white-space: nowrap;
+  z-index: 5;
+}
+
 .timeline__leftRow.is-selected,
 .timeline__row.is-selected {
   background: #eef2ff; // light indigo-ish, tune to Sketch later

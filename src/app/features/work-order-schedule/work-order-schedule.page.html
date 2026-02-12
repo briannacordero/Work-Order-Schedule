@@ -1,12 +1,15 @@
 <div class="page">
   <header class="page__header">
     <h1 class="page__title">Work Orders</h1>
-
-    <app-timescale-select
-      [value]="timescale"
-      (valueChange)="onTimescaleChange($event)"
-    ></app-timescale-select>
-  </header>
+  </header>  
+  
+    <div class="page__controls">
+      <span class="page__controlsLabel">Timescale</span>
+      <app-timescale-select
+        [value]="timescale"
+        (valueChange)="onTimescaleChange($event)"
+      ></app-timescale-select>
+    </div>
 
   <app-timeline-viewport
   [timescale]="timescale"

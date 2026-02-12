@@ -1,4 +1,4 @@
-<div class="form">
+<div class="form" [formGroup]="form">
     <div class="form__header">
         <div class="alert alert-danger mt-2" *ngIf="form.touched && form.errors?.['endBeforeStart']">
             End date must be on or after start date.
@@ -30,31 +30,58 @@
   
     <div class="form__field">
       <label>Status</label>
+      
       <ng-select
-        class="status-select"
-        [items]="statusOptions"
-        bindLabel="label"
-        bindValue="value"
-        [clearable]="false"
-        [searchable]="false"
-        [formControl]="form.controls.status"
-      ></ng-select>
-    </div>
-  
-    <div class="form__field">
-      <label>Start date</label>
-      <ngb-datepicker [formControl]="form.controls.startDate"></ngb-datepicker>
-      <small class="text-danger" *ngIf="form.controls.startDate.touched && form.controls.startDate.invalid">
-        Start date is required.
-      </small>
-    </div>
-  
+      formControlName="status"
+      [clearable]="false"
+      [searchable]="false"
+      [items]="statusOptions"
+      bindValue="value"
+      bindLabel="label"
+      >
+      <ng-template ng-label-tmp let-item="item">
+        <span class="status-pill" [ngClass]="'status-' + item.value">
+          {{ item.label }}
+        </span>
+      </ng-template>
+    </ng-select>  
+    
+    </div>    
+
     <div class="form__field">
       <label>End date</label>
-      <ngb-datepicker [formControl]="form.controls.endDate"></ngb-datepicker>
+      <div class="date-input">
+        <input
+        class="form-control"
+        placeholder="MM/DD/YYYY"
+        [value]="endDisplay"
+        ngbDatepicker
+        #endDp="ngbDatepicker"
+        (dateSelect)="onEndPicked($event)"
+        (click)="endDp.toggle()"
+        readonly
+      />
       <small class="text-danger" *ngIf="form.controls.endDate.touched && form.controls.endDate.invalid">
         End date is required.
       </small>
     </div>
-  </div>
+  
+    <div class="form__field">
+      <label>Start date</label>
+      <div class="date-input">
+        <input
+        class="form-control"
+        placeholder="MM/DD/YYYY"
+        [value]="startDisplay"
+        ngbDatepicker
+        #startDp="ngbDatepicker"
+        (dateSelect)="onStartPicked($event)"
+        (click)="startDp.toggle()"
+        readonly
+      />
+      <small class="text-danger" *ngIf="form.controls.startDate.touched && form.controls.startDate.invalid">
+        Start date is required.
+      </small>
+    </div>
+</div>
   
