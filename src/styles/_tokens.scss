@@ -1,0 +1,89 @@
+/* src/styles/_tokens.scss */
+:root {
+    /* Backgrounds */
+    --bg-app: #f5f6fb;
+    --bg-surface: #ffffff;
+    --bg-subtle: #f0f2f8;
+  
+    /* Borders */
+    --border-light: #e6e8f2;
+    --border-default: #d8dbea;
+  
+    /* Text */
+    --text-primary: #1e2134;
+    --text-secondary: #6c728f;
+    --text-muted: #9aa0b5;
+  
+    /* Brand */
+    --brand-primary: #5b5ce2;
+    --brand-primary-hover: #4c4dd6;
+  
+    /* Timeline tint */
+    --timeline-highlight: #e9eafc;
+  
+    /* Status colors */
+    /* ===== Status pills (pill bg + text) ===== */
+    --status-open-bg: #E4FDFF;
+    --status-open-text: #00B0BF;
+    --status-open-border: #CEFBFF; /* optional but useful */
+
+    --status-progress-bg: #D6D8FF;
+    --status-progress-text: #3E40DB;
+
+    --status-complete-bg: #E1FFCC;
+    --status-complete-text: #08A268;
+
+    --status-blocked-bg: #FCEEB5;
+    --status-blocked-text: #B13600;
+
+    /* ===== Work order bar (bar bg + text + border) ===== */
+    --bar-text: #030929;
+
+    --bar-open-bg: #F2FEFF;     /* derived from Open pill family */
+    --bar-open-border: #CEFBFF; /* matches open border */
+
+    --bar-progress-bg: #EDEEFF;
+    --bar-progress-border: #DEE0FF;
+
+    --bar-complete-bg: #F8FFF3;
+    --bar-complete-border: #D1FAB3;
+
+    --bar-blocked-bg: #FFFCF1;
+    --bar-blocked-border: #FFF5CF;
+  
+    /* Radius */
+    --radius-sm: 8px;
+    --radius-md: 12px;
+  
+    /* Shadows */
+    --shadow-sm: 0 4px 12px rgba(24, 28, 45, 0.08);
+  
+    /* Typography */
+    --font-family: "Inter", system-ui, -apple-system, sans-serif;
+  
+    --fs-h1: 26px;
+    --fs-h2: 20px;
+    --fs-body: 14px;
+    --fs-label: 13px;
+  
+    --fw-semibold: 600;
+    --fw-medium: 500;
+    --fw-regular: 400;
+
+    /* Bar */
+    --bar-height: 32px;
+    --bar-radius: 10px;
+  
+    --menu-radius: 10px;
+    --shadow-lg: 0 10px 26px rgba(0, 0, 0, 0.12);
+  
+    --danger: #dc2626;
+
+    /* Panel */
+    --overlay-backdrop: rgba(17, 24, 39, 0.35);
+    --shadow-drawer: -12px 0 30px rgba(0, 0, 0, 0.12);
+
+    /* Schedule */
+    --schedule-grid-bg: #F7F9FC;
+  }
+  

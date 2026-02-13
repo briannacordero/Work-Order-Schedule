@@ -1,10 +1,10 @@
-.timescale-select {
-    width: 120px;
-  
-    ::ng-deep .ng-select-container {
-      min-height: 32px;
-      border-radius: 8px;
-      font-size: 13px;
-    }
-  }
-  
+@use "styles/mixins" as mx;
+
+:host {
+  display: inline-block;
+  width: 120px;
+}
+
+:host ::ng-deep .ng-select .ng-select-container {
+  @include mx.control(32px);
+}

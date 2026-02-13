@@ -1,90 +1,116 @@
+@use "styles/mixins" as mx;
+
 .form {
-    padding: 16px;
-  }
-  
-  .form__header {
-    display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
-    gap: 12px;
-    margin-bottom: 12px;
-  }
-  
-  .form__title {
-    font-size: 16px;
-    font-weight: 600;
-    margin: 0;
-  }
-  
-  .form__subtitle {
-    font-size: 12px;
-    color: #6b7280;
-    margin: 4px 0 0;
-  }
-  
-  .form__actions {
-    display: flex;
-    gap: 8px;
-    align-items: center;
-  }
-  
-  .form__field {
-    margin-top: 12px;
+  padding: 16px;
+}
 
-    .date-input {
-      position: relative;
-      .form-control {
-        cursor: pointer;
-      }
-    }
-  
-    label {
-      font-size: 12px;
-      font-weight: 600;
-      color: #374151;
-      display: block;
-      margin-bottom: 6px;
-    }
-  }
-  
-  ::ng-deep .status-select .ng-select-container {
-    min-height: 38px;
+.form__header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.form__title {
+  margin: 0;
+  @include mx.heading(16px, var(--fw-semibold));
+}
+
+.form__subtitle {
+  margin: 4px 0 0;
+  @include mx.helper-text(12px, var(--text-secondary));
+}
+
+.form__actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.form__field {
+  margin-top: 12px;
+
+  label {
+    display: block;
+    margin-bottom: 6px;
+
+    font-size: 12px;
+    font-weight: var(--fw-semibold);
+    color: var(--text-secondary);
   }
 
-  :host ::ng-deep .ng-select {
-    width: 100%;
+  .date-input {
+    position: relative;
+
+    .form-control {
+      cursor: pointer;
+    }
   }
-  
-  :host ::ng-deep .ng-select .ng-select-container {
-    min-height: 44px;
-    border: 1px solid #d0d5dd;
-    border-radius: 10px; /* match your inputs */
-    padding: 6px 12px;
-    box-sizing: border-box;
-    display: flex;
-    align-items: center;
-  }
-  
-  :host ::ng-deep .ng-select.ng-select-focused .ng-select-container {
-    border-color: #2563eb;
-    box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.15);
-  }
-  
-  /* Pill itself */
-  .status-pill {
-    display: inline-flex;
-    align-items: center;
-    height: 22px;
-    padding: 0 10px;
-    border-radius: 999px;
-    font-size: 12px;
-    font-weight: 500;
-    line-height: 1;
-  }
-  
-  .status-open { background: #dbeafe; color: #1e40af; }
-  .status-in-progress { background: #e0e7ff; color: #3730a3; }
-  .status-complete { background: #dcfce7; color: #166534; }
-  .status-blocked { background: #fef3c7; color: #92400e; }
-  
-  
+}
+
+/* ng-select should fill width */
+:host ::ng-deep .ng-select {
+  width: 100%;
+}
+
+/* ng-select input shell: use the same control mixin as other inputs */
+:host ::ng-deep .ng-select .ng-select-container {
+  /* choose 44px because you had that in your design */
+  @include mx.control(38px, var(--radius-md));
+
+  /* ng-select sometimes needs explicit alignment */
+  display: flex;
+  align-items: center;
+
+  /* ng-select adds its own padding; keep yours if you like */
+  padding: 6px 12px;
+  box-sizing: border-box;
+}
+
+/* If you still need a variant for status select only */
+::ng-deep .status-select .ng-select-container {
+  min-height: 38px;
+}
+
+/* Focus state: ideally handled by mx.control via :focus-within.
+   If ng-select doesn't trigger focus-within in your DOM, keep this: */
+:host ::ng-deep .ng-select.ng-select-focused .ng-select-container {
+  border-color: var(--brand-primary);
+  box-shadow: 0 0 0 3px rgba(91, 92, 226, 0.15);
+}
+
+/* Selected value pill in the ng-select label template */
+.status-pill {
+  display: inline-flex;
+  align-items: center;
+  height: 22px;
+  padding: 0 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: var(--fw-medium);
+  line-height: 1;
+}
+
+/* Use your system tokens (same mapping as work-order-bar) */
+.status-open {
+  background: var(--status-open-bg);
+  color: var(--status-open-text);
+  border: 1px solid var(--status-open-border);
+}
+
+.status-in-progress {
+  background: var(--status-progress-bg);
+  color: var(--status-progress-text);
+}
+
+.status-complete {
+  background: var(--status-complete-bg);
+  color: var(--status-complete-text);
+}
+
+.status-blocked {
+  background: var(--status-blocked-bg);
+  color: var(--status-blocked-text);
+}
+

@@ -1,0 +1,153 @@
+/* src/styles/_mixins.scss */
+@mixin control($height: 32px, $radius: var(--radius-sm)) {
+    min-height: $height;
+    height: $height;
+  
+    border: 1px solid var(--border-default);
+    border-radius: $radius;
+  
+    background: var(--bg-surface);
+    color: var(--text-primary);
+  
+    font-size: var(--fs-label);
+  
+    padding: 0 10px;
+  
+    transition: border-color 120ms ease, box-shadow 120ms ease;
+  
+    &:focus-within {
+      border-color: var(--brand-primary);
+      box-shadow: 0 0 0 3px rgba(91, 92, 226, 0.15);
+    }
+  }
+  
+/* SURFACES */
+@mixin surface($radius: var(--radius-md), $border: true, $shadow: false) {
+    background: var(--bg-surface);
+  
+    @if $border {
+      border: 1px solid var(--border-light);
+    }
+  
+    border-radius: $radius;
+  
+    @if $shadow {
+      box-shadow: var(--shadow-sm);
+    }
+  }
+  
+  /* DIVIDERS */
+  @mixin divider($side: bottom, $color: var(--border-light)) {
+    @if $side == bottom { border-bottom: 1px solid $color; }
+    @if $side == top { border-top: 1px solid $color; }
+    @if $side == left { border-left: 1px solid $color; }
+    @if $side == right { border-right: 1px solid $color; }
+  }
+  
+  /* TYPOGRAPHY */
+  @mixin text-body {
+    font-size: var(--fs-body);
+    font-weight: var(--fw-regular);
+    color: var(--text-primary);
+  }
+  
+  @mixin text-label($weight: var(--fw-medium), $color: var(--text-secondary)) {
+    font-size: var(--fs-label);
+    font-weight: $weight;
+    color: $color;
+  }
+  
+  /* INTERACTIONS */
+  @mixin hover-subtle {
+    &:hover { background: var(--bg-subtle); }
+  }
+  
+  @mixin focus-ring($color: var(--brand-primary)) {
+    &:focus {
+      outline: none;
+    }
+    &:focus-visible {
+      outline: 0;
+      box-shadow: 0 0 0 3px rgba(91, 92, 226, 0.15);
+      border-color: $color;
+    }
+  }
+  
+  /* PILLS (status etc.) */
+  @mixin pill($bg, $text, $border: null) {
+    background: $bg;
+    color: $text;
+    border-radius: 999px;
+    display: inline-flex;
+    align-items: center;
+    padding: 4px 8px;
+    font-size: 12px;
+    line-height: 1;
+  
+    @if $border != null {
+      border: 1px solid $border;
+    }
+  }  
+  
+  /* TOOLTIP */
+  @mixin tooltip($bg: #111827, $color: #fff) {
+    position: absolute;
+    background: $bg;
+    color: $color;
+    font-size: 12px;
+    padding: 4px 8px;
+    border-radius: 6px;
+    white-space: nowrap;
+    z-index: 5;
+  }
+  
+/* reveal on hover (menu button) */
+@mixin reveal-on-hover($target) {
+    #{$target} {
+      opacity: 0;
+      pointer-events: none;
+    }
+  
+    &:hover #{$target} {
+      opacity: 1;
+      pointer-events: auto;
+    }
+  }
+  
+  /* dropdown surface */
+  @mixin dropdown($radius: 10px, $shadow: var(--shadow-sm)) {
+    background: var(--bg-surface);
+    border: 1px solid var(--border-light);
+    border-radius: $radius;
+    box-shadow: $shadow;
+  }
+
+  @mixin heading($size: 16px, $weight: var(--fw-semibold)) {
+    font-size: $size;
+    font-weight: $weight;
+    color: var(--text-primary);
+  }
+  
+  @mixin helper-text($size: 12px, $color: var(--text-muted)) {
+    font-size: $size;
+    color: $color;
+  }
+
+  /* Panel */
+  @mixin drawer-surface {
+    background: var(--bg-surface);
+    border-left: 1px solid var(--border-light);
+    box-shadow: var(--shadow-drawer, -12px 0 30px rgba(0, 0, 0, 0.12));
+  }
+  
+  /* Page Layout */
+  @mixin page-padding($desktop: 24px, $mobile: 16px) {
+    padding: $desktop;
+  
+    @media (max-width: 1024px) {
+      padding: $mobile;
+    }
+  }
+  
+  
+  

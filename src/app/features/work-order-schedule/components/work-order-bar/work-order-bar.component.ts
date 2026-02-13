@@ -1,4 +1,4 @@
-import { Component, EventEmitter, HostListener, Input, Output } from '@angular/core';
+import { Component, EventEmitter, HostListener, Input, Output, ElementRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { WorkOrder } from '../../../../models/work-order.model';
 
@@ -22,9 +22,10 @@ export class WorkOrderBarComponent {
     this.menuOpen = false;
   }
 
-  @HostListener('document:click')
-  onDocClick() {
-    this.menuOpen = false;
+  @HostListener('document:click', ['$event'])
+  onDocumentClick(event: MouseEvent) {
+    const clickedInside = this.elRef.nativeElement.contains(event.target as Node);
+    if (!clickedInside) this.menuOpen = false;
   }
 
   get statusLabel(): string {
@@ -37,6 +38,8 @@ export class WorkOrderBarComponent {
   }
   
   menuOpen = false;
+
+  constructor(private elRef: ElementRef<HTMLElement>) {}
 
   toggleMenu(event: MouseEvent) {
     event.stopPropagation();

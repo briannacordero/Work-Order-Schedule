@@ -17,6 +17,9 @@
         "build": {
           "builder": "@angular-devkit/build-angular:application",
           "options": {
+            "stylePreprocessorOptions": {
+              "includePaths": ["src"]
+            },
             "outputPath": "dist/work-order-timeline",
             "index": "src/index.html",
             "browser": "src/main.ts",

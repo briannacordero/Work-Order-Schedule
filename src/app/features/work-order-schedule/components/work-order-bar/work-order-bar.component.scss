@@ -1,113 +1,205 @@
+@use "styles/mixins" as mx;
+
 .bar {
-    position: absolute;
-    top: 8px;
-    height: 32px;
-    border-radius: 10px;
-    padding: 0 10px;
-    box-sizing: border-box;
-  
-    display: flex;
-    align-items: center;
-    justify-content: space-between; // ✅ name left, right group right
-    gap: 10px;
-  
-    overflow: visible;
+  position: absolute;
+  top: 8px;
+  height: var(--bar-height, 32px);
+  border-radius: var(--bar-radius, 10px);
+  padding: 0 10px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+
+  overflow: visible;
+
+  color: var(--bar-text);
+
+}
+
+/* text */
+.bar__name,
+.bar__label {
+  font-size: 13px;
+  font-weight: var(--fw-medium);
+  min-width: 0;
+
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* right group */
+.bar__right {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  flex: 0 0 auto;
+}
+
+/* status pill */
+.bar__status {
+  @include mx.pill(rgba(255, 255, 255, 0.6), var(--text-primary));
+  font-size: 12px; /* keep */
+  padding: 3px 10px; /* override pill padding if you want */
+}
+
+/* tag pill */
+.bar__tag {
+  @include mx.pill(rgba(255, 255, 255, 0.7), var(--text-primary));
+  font-size: 12px;
+  padding: 3px 8px;
+}
+
+/* menu button (hidden until hover) */
+.bar__menuBtn {
+  width: 36px;            
+  height: 32px;           
+  border-radius: 10px;    
+  border: 0;
+  background: rgba(3, 9, 41, 0.06);
+  color: rgba(3, 9, 41, 0.55);
+  cursor: pointer;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  opacity: 1;
+  pointer-events: auto;
+
+  font-size: 18px;
+  line-height: 1;
+
+  &:hover {
+    background: rgba(3, 9, 41, 0.10);
   }
-  
-  .bar__name {
-    font-size: 13px;
-    font-weight: 500;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-  
-  .bar__right {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    flex: 0 0 auto;
-  }
-  
-  .bar__status {
-    font-size: 12px;
-    padding: 3px 10px;
-    border-radius: 999px;
-    white-space: nowrap;
-  }
-  
-  /* Hide menu until hover (matches mock) */
-  .bar__menuBtn {
-    opacity: 0;
-    pointer-events: none;
-    background: transparent;
+}
+
+.bar__menuWrap {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+}
+.bar__menuWrap.is-open .bar__menuBtn {
+  background: rgba(3, 9, 41, 0.14); 
+  color: rgba(3, 9, 41, 0.70);
+}
+
+.bar__menuWrap.is-open .bar__menuBtn:hover {
+  background: rgba(3, 9, 41, 0.14);
+}
+
+.bar {
+  @include mx.reveal-on-hover(".bar__menuBtn");
+}
+
+/* dropdown */
+.bar__menu {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;             
+  transform: none;      
+
+  min-width: 240px;
+  padding: 10px 0;
+  z-index: 50;
+
+  background: var(--bg-surface);
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  border-radius: 14px;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.12);
+
+  @include mx.dropdown(var(--menu-radius, 10px), var(--shadow-lg, var(--shadow-sm)));
+
+  button {
+    width: 100%;
+    padding: 10px 12px;
     border: none;
+    background: none;
+    text-align: left;
     cursor: pointer;
-    font-size: 16px;
-    line-height: 1;
-  }
-  
-  .bar:hover .bar__menuBtn {
-    opacity: 1;
-    pointer-events: auto;
-  }
-  
-  /* Status color mapping (tune later to Sketch) */
-  .status-open { background: #dbeafe; }
-  .status-in-progress { background: #e0e7ff; }
-  .status-complete { background: #dcfce7; }
-  .status-blocked { background: #fef3c7; }
-  
-  .status-open .bar__status { background: #bfdbfe; color: #1e40af; }
-  .status-in-progress .bar__status { background: #c7d2fe; color: #3730a3; }
-  .status-complete .bar__status { background: #bbf7d0; color: #166534; }
-  .status-blocked .bar__status { background: #fde68a; color: #92400e; }
-  
-  /* Menu dropdown */
-  .bar__menu {
-    position: absolute;
-    top: calc(100% + 6px);
-    right: 10px;
-    background: #fff;
-    border: 1px solid #e5e7eb;
-    border-radius: 10px;
-    box-shadow: 0 10px 26px rgba(0, 0, 0, 0.12);
-    min-width: 140px;
-    z-index: 20;
-  
-    button {
-      width: 100%;
-      padding: 10px 12px;
-      border: none;
-      background: none;
-      text-align: left;
-      cursor: pointer;
-  
-      &:hover { background: #f3f4f6; }
-      &.danger { color: #dc2626; }
+    color: var(--text-primary);
+
+    &:hover {
+      background: var(--bg-subtle);
+    }
+
+    &.danger {
+      color: var(--danger, #dc2626);
     }
   }
-  
-  
-  .bar__tag {
-    font-size: 12px;
-    padding: 3px 8px;
-    border-radius: 999px;
-    background: rgba(255, 255, 255, 0.7);
-    color: #111;
-  }  
-  
-  .bar__label {
-    flex: 1 1 auto;
-    min-width: 0;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+}
+
+.bar__menuItem {
+  width: 100%;
+  border: 0;
+  background: transparent;
+  text-align: left;
+  cursor: pointer;
+
+  padding: 12px 18px;     
+  font-size: 20px;        
+  font-weight: var(--fw-medium);
+  line-height: 1.2;
+
+  color: var(--bar-text, #030929);
+
+  &:hover {
+    background: rgba(3, 9, 41, 0.04);
   }
+}
 
-  .status-open { background: #3b82f6; }
-  .status-in-progress { background: #6366f1; }
-  .status-complete { background: #22c55e; }
-  .status-blocked { background: #f59e0b; }
+.bar__menuItem.is-delete {
+  color: #3E40DB; 
+}
 
-  
+
+/* ===== Status mapping (single source of truth) ===== */
+/* Use your existing CSS vars so it matches your system tokens */
+.status-open {
+  background: var(--bar-open-bg);
+  color: var(--bar-text);
+  border: 1px solid var(--bar-open-border);
+
+  .bar__status {
+    background: var(--status-open-bg);
+    color: var(--status-open-text);
+    border: 1px solid var(--status-open-border);
+  }
+}
+
+.status-in-progress {
+  background: var(--bar-progress-bg);
+  color: var(--bar-text);
+  border: 1px solid var(--bar-progress-border);
+
+  .bar__status {
+    background: var(--status-progress-bg);
+    color: var(--status-progress-text);
+  }
+}
+
+.status-complete {
+  background: var(--bar-complete-bg);
+  color: var(--bar-text);
+  border: 1px solid var(--bar-complete-border);
+
+  .bar__status {
+    background: var(--status-complete-bg);
+    color: var(--status-complete-text);
+  }
+}
+
+.status-blocked {
+  background: var(--bar-blocked-bg);
+  color: var(--bar-text);
+  border: 1px solid var(--bar-blocked-border);
+
+  .bar__status {
+    background: var(--status-blocked-bg);
+    color: var(--status-blocked-text);
+  }
+}
+

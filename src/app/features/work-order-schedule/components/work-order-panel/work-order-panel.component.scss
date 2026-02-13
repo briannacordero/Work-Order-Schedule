@@ -1,32 +1,46 @@
+@use "styles/mixins" as mx;
+
 .overlay {
-    position: fixed;
-    inset: 0;
-    z-index: 1000;
-  }
-  
-  .backdrop {
-    position: absolute;
-    inset: 0;
-    background: rgba(17, 24, 39, 0.35);
-  }
-  
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+}
+
+.backdrop {
+  position: absolute;
+  inset: 0;
+  background: var(--overlay-backdrop, rgba(17, 24, 39, 0.35));
+}
+
+.panel {
+  position: absolute;
+  top: 0;
+  right: 0;
+  height: 100%;
+
+  width: clamp(320px, 32vw, 420px); /* responsive, still maxes at 420 */
+  overflow: auto;
+
+  @include mx.drawer-surface;
+
+  /* simple slide-in */
+  animation: slideIn 160ms ease-out;
+}
+
+/* respects users who prefer reduced motion */
+@media (prefers-reduced-motion: reduce) {
   .panel {
-    position: absolute;
-    top: 0;
-    right: 0;
-    height: 100%;
-    width: 420px; // adjust to match Sketch
-    background: #fff;
-    border-left: 1px solid #e5e7eb;
-    box-shadow: -12px 0 30px rgba(0, 0, 0, 0.12);
-    overflow: auto;
-  
-    // simple slide-in
-    animation: slideIn 160ms ease-out;
+    animation: none;
   }
-  
-  @keyframes slideIn {
-    from { transform: translateX(20px); opacity: 0.6; }
-    to { transform: translateX(0); opacity: 1; }
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateX(20px);
+    opacity: 0.6;
   }
-  
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
