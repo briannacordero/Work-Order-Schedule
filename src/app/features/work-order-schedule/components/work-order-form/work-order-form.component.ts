@@ -159,6 +159,8 @@ export class WorkOrderFormComponent implements OnChanges {
     }
   
     this.buildValidators();
+    console.log('prefillStartDateIso:', this.prefillStartDateIso, 'mode:', this.mode);
+
   }  
 
   onCancel() {

@@ -14,20 +14,39 @@
     </div>
   
     <div class="timeline__right">
-      <div class="timeline__scroll" #timelineScroll>
+      <div class="timeline__scroll" #timelineScroll (scroll)="onScroll()">
         <div class="timeline__scrollContent">
+          
+          <div
+          class="timeline__currentTag"
+          *ngIf="showCurrentTag"
+          [style.left.px]="currentTagLeftPx"
+        >
+          {{ currentTagText }}
+        </div>
+        
+        <div
+          class="timeline__nowLine"
+          *ngIf="showCurrentTag"
+          [style.left.px]="currentLineLeftPx"
+        ></div>        
+
           <div class="timeline__header">
-            <div class="timeline__cell" *ngFor="let col of columns">
+            <div
+            class="timeline__cell"
+            *ngFor="let col of columns; let i = index"
+            [class.is-current]="i === currentColIndex"
+            >
               {{ col.label }}
             </div>
           </div>
       
           <div class="timeline__rows">
             <div
-              class="timeline__row"
-              *ngFor="let wc of workCenters"
-              (click)="onRowSelect(wc.id)"
-            >
+            class="timeline__row"
+            *ngFor="let wc of workCenters"
+            (click)="onRowClick($event, wc)"
+          >          
               <div class="timeline__cell" *ngFor="let col of columns"></div>
           
               <app-work-order-bar

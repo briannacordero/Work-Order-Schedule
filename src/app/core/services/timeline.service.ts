@@ -38,6 +38,32 @@ export class TimelineService {
     return buildMonthColumns(start, end);
   }
   
+  buildColumnsWindow(start: Date, timescale: Timescale, count: number): TimelineColumn[] {
+    const startDay = this.startOfDay(start);
+  
+    if (timescale === 'day') {
+      const end = this.addDays(startDay, count);
+      return buildDayColumns(startDay, end);
+    }
+  
+    if (timescale === 'week') {
+      const s = startOfWeek(startDay);
+      const end = addDays(s, count * 7);
+      return buildWeekColumns(s, end);
+    }
+  
+    // month
+    const s = startOfMonth(startDay);
+    const end = addMonths(s, count);
+    return buildMonthColumns(s, end);
+  }
+  
+  shiftStartByColumns(start: Date, timescale: Timescale, deltaCols: number): Date {
+    if (timescale === 'day') return this.addDays(start, deltaCols);
+    if (timescale === 'week') return this.addDays(start, deltaCols * 7);
+    // month
+    return addMonths(startOfMonth(start), deltaCols);
+  }  
 
   dateToX(date: Date, columns: { start: Date; end: Date }[], colWidth: number): number {
     if (!columns.length) return 0;

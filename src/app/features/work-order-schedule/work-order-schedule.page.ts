@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TimescaleSelectComponent } from './components/timescale-select/timescale-select.component';
 import { TimelineViewportComponent } from './components/timeline-viewport/timeline-viewport.component';
@@ -17,7 +17,47 @@ import { rangesOverlapInclusive } from '../../core/utils/overlap.utils';
 })
 
 
-export class WorkOrderSchedulePageComponent {
+export class WorkOrderSchedulePageComponent implements OnInit {
+  private readonly STORAGE_KEY = 'naologic-work-orders-v1';
+
+  ngOnInit(): void {
+    this.orders = this.loadOrders();
+    console.log('Loaded orders count:', this.orders.length);
+
+  }
+
+  private loadOrders(): WorkOrder[] {
+    try {
+      const raw = localStorage.getItem(this.STORAGE_KEY);
+      if (!raw) return [...WORK_ORDERS];
+
+      const parsed = JSON.parse(raw) as WorkOrder[];
+      if (!Array.isArray(parsed)) return [...WORK_ORDERS];
+
+      // minimal validation
+      return parsed.filter(o =>
+        typeof o?.id === 'string' &&
+        typeof o?.name === 'string' &&
+        typeof o?.workCenterId === 'string' &&
+        typeof o?.status === 'string' &&
+        typeof o?.startDate === 'string' &&
+        typeof o?.endDate === 'string'
+      );
+    } catch {
+      return [...WORK_ORDERS];
+    }
+  }
+
+  private persistOrders(): void {
+    try {
+      localStorage.setItem(this.STORAGE_KEY, JSON.stringify(this.orders));
+    } catch {
+      // ignore storage errors
+    }
+    console.log('Persisting orders count:', this.orders.length);
+
+  }
+
   timescale: Timescale = 'day';
 
   orders: WorkOrder[] = [];
@@ -25,7 +65,7 @@ export class WorkOrderSchedulePageComponent {
   panelOpen = false;
   panelMode: 'create' | 'edit' = 'create';
   selectedOrder?: WorkOrder;
-  createContext?: { workCenterId: string; startDateIso: string };
+  createContext?: { workCenterId: string; startDateIso?: string };
 
   onCreateOrder(req: { workCenterId: string; startDateIso: string }) {
     console.log('Create request received:', req);
@@ -47,10 +87,7 @@ export class WorkOrderSchedulePageComponent {
   
     this.panelMode = 'create';
     this.selectedOrder = undefined;
-    this.createContext = {
-      workCenterId,
-      startDateIso: new Date().toISOString().slice(0, 10),
-    };
+    this.createContext = { workCenterId }; // no startDateIso at all
     this.panelOpen = true;
   }  
 
@@ -66,7 +103,8 @@ export class WorkOrderSchedulePageComponent {
 
   onDeleteOrder(order: WorkOrder) {
     this.orders = this.orders.filter(o => o.id !== order.id);
-  }  
+    this.persistOrders();
+  }
 
   onClosePanel() {
     this.panelOpen = false;
@@ -76,11 +114,14 @@ export class WorkOrderSchedulePageComponent {
 
 
   onSaveOrder(order: WorkOrder) {
-    if (this.panelMode === 'edit') {
-      this.orders = this.orders.map(o => (o.id === order.id ? { ...order } : o));
-    } else {
-      this.orders = [...this.orders, order];
-    }
-    this.onClosePanel();
+    const exists = this.orders.some(o => o.id === order.id);
+
+    this.orders = exists
+      ? this.orders.map(o => (o.id === order.id ? { ...order } : o))
+      : [...this.orders, order];
+
+    this.persistOrders();
+    this.onClosePanel?.(); // if you have it
+    this.panelOpen = false; // if you use this pattern
   }
 }

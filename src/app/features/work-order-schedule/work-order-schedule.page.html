@@ -11,24 +11,23 @@
       ></app-timescale-select>
     </div>
 
-  <app-timeline-viewport
-  [timescale]="timescale"
-  [orders]="orders"
-  (selectWorkCenter)="onSelectWorkCenter($event)"
-  (editOrder)="onEditOrder($event)"
-  (deleteOrder)="onDeleteOrder($event)"
-  ></app-timeline-viewport>
+    <app-timeline-viewport
+    [timescale]="timescale"
+    [orders]="orders"
+    (createOrder)="onCreateOrder($event)"
+    (editOrder)="onEditOrder($event)"
+    (deleteOrder)="onDeleteOrder($event)"
+  ></app-timeline-viewport>  
 
-
-  <app-work-order-panel
-  [open]="panelOpen"
-  [mode]="panelMode"
-  [initial]="selectedOrder"
-  [workCenterId]="panelMode === 'create' ? createContext?.workCenterId : selectedOrder?.workCenterId"
-  [prefillStartDateIso]="createContext?.startDateIso"
-  [existingOrders]="orders"
-  (close)="onClosePanel()"
-  (save)="onSaveOrder($event)"
-  ></app-work-order-panel>
+    <app-work-order-panel
+    [open]="panelOpen"
+    [mode]="panelMode"
+    [initial]="selectedOrder"
+    [workCenterId]="panelMode === 'create' ? createContext?.workCenterId : selectedOrder?.workCenterId"
+    [prefillStartDateIso]="undefined"
+    [existingOrders]="orders"
+    (close)="onClosePanel()"
+    (save)="onSaveOrder($event)"
+    ></app-work-order-panel>
 
 </div>

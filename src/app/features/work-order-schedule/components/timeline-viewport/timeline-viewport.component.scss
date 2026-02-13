@@ -109,12 +109,16 @@ $colWidth: 80px;
 
 .timeline__cell {
   position: relative;
-  border-right: 1px solid #eef2f7; // whatever your grid line is
+  border-right: 1px solid #eef2f7; 
   border-bottom: 1px solid #eef2f7;
 }
 
+.timeline__cell.is-current {
+  background: rgba(124, 117, 255, 0.08);
+}
+
 .timeline__row:hover .timeline__cell:hover {
-  outline: 1px solid #93c5fd;     // hover border
+  outline: 1px solid #93c5fd;     
   outline-offset: -1px;
   z-index: 2;
 }
@@ -150,5 +154,34 @@ $colWidth: 80px;
   font-size: 12px;
   display: inline-flex;
   align-items: center;
+}
+
+.timeline__scrollContent {
+  position: relative; // required for absolute positioning
+}
+
+.timeline__currentTag {
+  position: absolute;
+  top: 36px; // tweak based on your header height
+  transform: translateX(-50%);
+  padding: 4px 10px;
+  border-radius: 8px;
+  font-size: 12px;
+  line-height: 1;
+  font-weight: 500;
+  background: #e7e6ff; // match your mock
+  color: #3b33dd;      // match your mock
+  z-index: 5;
+  pointer-events: none;
+}
+
+.timeline__nowLine {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: #c9c7ff; // subtle purple
+  z-index: 2;
+  pointer-events: none;
 }
 
