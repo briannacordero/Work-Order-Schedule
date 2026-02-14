@@ -98,33 +98,26 @@
   width: 100%;
 }
 
-/* ng-select input shell: use the same control mixin as other inputs */
 :host ::ng-deep .ng-select .ng-select-container {
-  /* choose 44px because you had that in your design */
+
   @include mx.control(38px, var(--radius-md));
 
-  /* ng-select sometimes needs explicit alignment */
   display: flex;
   align-items: center;
 
-  /* ng-select adds its own padding; keep yours if you like */
   padding: 6px 12px;
   box-sizing: border-box;
 }
 
-/* If you still need a variant for status select only */
 ::ng-deep .status-select .ng-select-container {
   min-height: 38px;
 }
 
-/* Focus state: ideally handled by mx.control via :focus-within.
-   If ng-select doesn't trigger focus-within in your DOM, keep this: */
 :host ::ng-deep .ng-select.ng-select-focused .ng-select-container {
   border-color: var(--brand-primary);
   box-shadow: 0 0 0 3px rgba(91, 92, 226, 0.15);
 }
 
-/* Selected value pill in the ng-select label template */
 .status-pill {
   display: inline-flex;
   align-items: center;
@@ -136,7 +129,6 @@
   line-height: 1;
 }
 
-/* Use your system tokens (same mapping as work-order-bar) */
 .status-open {
   background: var(--status-open-bg);
   color: var(--status-open-text);

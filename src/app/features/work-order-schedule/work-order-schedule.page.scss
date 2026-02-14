@@ -30,7 +30,6 @@
   color: var(--text-secondary);
 }
 
-/* use the same control shell as everything else */
 .fake-control {
   @include mx.control(32px, var(--radius-sm));
   font-size: var(--fs-label); /* 13px */
