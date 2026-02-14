@@ -1,0 +1,15 @@
+@use "styles/mixins" as mx;
+
+.app-header {
+    height: 50px;
+    display: flex;
+    align-items: center;
+    @include mx.page-padding(24px, 16px);
+    background: #ffffff;
+  }
+  
+  .app-logo {
+    height: 12px;
+    width: auto;
+  }
+  

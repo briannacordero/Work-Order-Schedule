@@ -77,7 +77,7 @@
   @mixin pill($bg, $text, $border: null) {
     background: $bg;
     color: $text;
-    border-radius: 999px;
+    border-radius: 5px;
     display: inline-flex;
     align-items: center;
     padding: 4px 8px;

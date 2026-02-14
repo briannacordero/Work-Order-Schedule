@@ -2,7 +2,7 @@
 
 .bar {
   position: absolute;
-  top: 8px;
+  top: 30%;
   height: var(--bar-height, 32px);
   border-radius: var(--bar-radius, 10px);
   padding: 0 10px;
@@ -16,6 +16,15 @@
 
   color: var(--bar-text);
 
+  z-index: 2;
+
+}
+.bar__menu {
+  z-index: 60;
+}
+
+.bar.is-menu-open {
+  z-index: 50;
 }
 
 /* text */
@@ -54,8 +63,10 @@
 
 /* menu button (hidden until hover) */
 .bar__menuBtn {
+  all: unset;
+
   width: 36px;            
-  height: 32px;           
+  height: 22px;           
   border-radius: 10px;    
   border: 0;
   background: rgba(3, 9, 41, 0.06);
@@ -66,15 +77,37 @@
   align-items: center;
   justify-content: center;
 
-  opacity: 1;
-  pointer-events: auto;
+  opacity: 0;
+  pointer-events: none;
 
   font-size: 18px;
   line-height: 1;
 
+  transition: background 120ms ease, color 120ms ease;
+
   &:hover {
     background: rgba(3, 9, 41, 0.10);
   }
+}
+
+.bar:hover .bar__menuBtn {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.bar__menuWrap.is-open .bar__menuBtn {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.bar__menuBtn.is-active {
+  background: #E4E7EC;
+  color: #030929;  
+}
+
+.bar__menuBtn.is-active:hover {
+  background: #E4E7EC;
+  color: #030929;
 }
 
 .bar__menuWrap {
@@ -83,7 +116,7 @@
   align-items: center;
 }
 .bar__menuWrap.is-open .bar__menuBtn {
-  background: rgba(3, 9, 41, 0.14); 
+  background: rgba(3, 9, 41, 0.14);
   color: rgba(3, 9, 41, 0.70);
 }
 
@@ -91,15 +124,10 @@
   background: rgba(3, 9, 41, 0.14);
 }
 
-.bar {
-  @include mx.reveal-on-hover(".bar__menuBtn");
-}
-
 /* dropdown */
 .bar__menu {
   position: absolute;
-  top: calc(100% + 8px);
-  right: 0;             
+  top: calc(100% + 8px);           
   transform: none;      
 
   min-width: 240px;
@@ -140,7 +168,7 @@
   cursor: pointer;
 
   padding: 12px 18px;     
-  font-size: 20px;        
+  font-size: 14px;        
   font-weight: var(--fw-medium);
   line-height: 1.2;
 
@@ -202,4 +230,51 @@
     color: var(--status-blocked-text);
   }
 }
+
+// :host-context(.timeline.is-month) .bar {
+//   height: 28px;
+//   border-radius: 999px;
+//   padding: 0 8px;
+//   top: 50%;
+//   transform: translateY(-50%);
+// }
+
+// :host-context(.timeline.is-month) .bar__name {
+//   max-width: 0;
+//   opacity: 0;
+//   overflow: hidden;
+//   transition: max-width 140ms ease, opacity 140ms ease;
+// }
+
+// :host-context(.timeline.is-month) .bar:hover .bar__name,
+// :host-context(.timeline.is-month) .bar.is-selected .bar__name {
+//   max-width: 140px; /* tune */
+//   opacity: 1;
+// }
+
+// :host-context(.timeline.is-month) .bar__status {
+//   width: 10px;
+//   height: 10px;
+//   padding: 0;
+//   border-radius: 999px;
+//   font-size: 0; /* hide text */
+// }
+
+// :host-context(.timeline.is-month) .bar__menuBtn {
+//   width: 28px;
+//   height: 24px;
+//   border-radius: 999px;
+//   opacity: 0;
+//   pointer-events: none;
+// }
+
+// :host-context(.timeline.is-month) .bar__menuWrap {
+//   margin-left: 4px;
+// }
+
+// :host-context(.timeline.is-month) .bar:hover .bar__menuBtn,
+// :host-context(.timeline.is-month) .bar__menuWrap.is-open .bar__menuBtn {
+//   opacity: 1;
+//   pointer-events: auto;
+// }
 

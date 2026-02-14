@@ -49,6 +49,50 @@
   }
 }
 
+  .btn-cancel {
+    background: #ffffff;
+    color: #2E3147;
+  
+    box-shadow:
+      0 2px 4px rgba(16, 24, 40, 0.04),
+      0 6px 16px rgba(16, 24, 40, 0.08);
+  
+    &:hover {
+      transform: translateY(-1px);
+      box-shadow:
+        0 4px 8px rgba(16, 24, 40, 0.08),
+        0 10px 22px rgba(16, 24, 40, 0.12);
+    }
+  
+    &:active {
+      transform: translateY(0);
+    }
+  }
+
+  .btn-primary {
+  background: linear-gradient(
+    135deg,
+    #4F46E5 0%,
+    #6366F1 100%
+  );
+
+  color: #ffffff;
+
+  box-shadow:
+    0 3px 4px rgba(79, 70, 229, 0.35);
+
+  &:hover {
+    transform: translateY(-1px);
+    box-shadow:
+      0 10px 22px rgba(79, 70, 229, 0.45);
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
+}
+
+
 /* ng-select should fill width */
 :host ::ng-deep .ng-select {
   width: 100%;

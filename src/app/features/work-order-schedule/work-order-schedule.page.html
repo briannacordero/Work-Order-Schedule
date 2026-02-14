@@ -1,15 +1,27 @@
 <div class="page">
   <header class="page__header">
     <h1 class="page__title">Work Orders</h1>
-  </header>  
-  
-    <div class="page__controls">
-      <span class="page__controlsLabel">Timescale</span>
-      <app-timescale-select
-        [value]="timescale"
-        (valueChange)="onTimescaleChange($event)"
-      ></app-timescale-select>
+
+    <div class="page__headerBar">
+      <div class="page__controls">
+        <span class="page__controlsLabel">Timescale</span>
+
+        <app-timescale-select
+          [value]="timescale"
+          (valueChange)="onTimescaleChange($event)"
+        ></app-timescale-select>
+      </div>
+
+      <button
+        *ngIf="timescale === 'day' || timescale === 'week'"
+        class="btn-jump"
+        type="button"
+        (click)="viewport.jumpToNow()"
+      >
+        Current {{ timescale === 'week' ? 'Week' : 'Day' }}
+      </button>
     </div>
+  </header>
 
     <app-timeline-viewport
     [timescale]="timescale"
@@ -17,6 +29,7 @@
     (createOrder)="onCreateOrder($event)"
     (editOrder)="onEditOrder($event)"
     (deleteOrder)="onDeleteOrder($event)"
+    #viewport
   ></app-timeline-viewport>  
 
     <app-work-order-panel

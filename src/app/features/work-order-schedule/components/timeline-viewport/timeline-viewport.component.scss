@@ -13,6 +13,10 @@ $colWidth: 80px;
   min-height: 520px;
 
   @include mx.surface(var(--radius-md), $border: true, $shadow: false);
+
+  // &.is-month {
+  //   --row-height: 72px;
+  // }
 }
 
 /* LEFT */
@@ -128,13 +132,14 @@ $colWidth: 80px;
 .timeline__row:hover .timeline__cell:hover {
   outline: 1px solid rgba(91, 92, 226, 0.45); /* could token this later */
   outline-offset: -1px;
-  z-index: 2;
+  z-index: 30;
 }
 
 .timeline__row:hover .timeline__cell:hover::after {
   content: "Click to add dates";
   top: -28px;
   left: 6px;
+  z-index: 1;
 
   @include mx.tooltip();
 }

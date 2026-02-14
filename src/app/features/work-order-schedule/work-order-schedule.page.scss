@@ -6,10 +6,10 @@
 
 .page__header {
   display: flex;
-  align-items: center;
   justify-content: space-between;
-  gap: 12px;
   margin-bottom: 16px;
+  flex-direction: column;
+  gap: 16px; /* space between title and controls row */
 }
 
 .page__title {
@@ -20,9 +20,9 @@
 }
 
 .page__controls {
-  display: inline-flex;
+  display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 12px;
 }
 
 .page__controlsLabel {
@@ -36,3 +36,43 @@
   font-size: var(--fs-label); /* 13px */
   padding: 0 12px;            /* override if mx.control uses 0 10px */
 }
+
+.page__headerBar {
+  display: flex;
+  justify-content: space-between;
+}
+
+.page__headerActions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.btn-jump {
+  height: 32px;
+  padding: 0 14px;
+  border-radius: 999px;
+
+  font-size: 13px;
+  font-weight: var(--fw-medium);
+
+  border: 1px solid var(--border-light);
+  background: var(--bg-surface);
+  color: var(--text-primary);
+
+  cursor: pointer;
+  transition: all 120ms ease;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  &:hover {
+    background: var(--bg-subtle);
+  }
+
+  &:active {
+    transform: translateY(1px);
+  }
+}
+

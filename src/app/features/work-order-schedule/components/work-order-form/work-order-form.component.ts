@@ -1,7 +1,7 @@
-import { Component, EventEmitter, Input, OnChanges, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, Output, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators, AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
-import { NgbDatepickerModule, NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
+import { NgbDatepickerModule, NgbInputDatepicker, NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 import { NgSelectModule } from '@ng-select/ng-select';
 
 import { WorkOrder, WorkOrderStatus } from '../../../../models/work-order.model';
@@ -25,6 +25,9 @@ export class WorkOrderFormComponent implements OnChanges {
   @Input() workCenterId?: string;
   @Input() existingOrders: WorkOrder[] = [];
   @Input() prefillStartDateIso?: string;
+
+  @ViewChild('startDp', { static: false }) startDp!: NgbInputDatepicker;
+  @ViewChild('endDp', { static: false }) endDp!: NgbInputDatepicker;
 
   statusOptions = [
     { value: 'open', label: 'Open' },
@@ -52,6 +55,25 @@ export class WorkOrderFormComponent implements OnChanges {
     startDate: new FormControl<NgbDateStruct | null>(null, { validators: [Validators.required] }),
     endDate: new FormControl<NgbDateStruct | null>(null, { validators: [Validators.required] }),
   });
+
+  openPicker(
+    dp: NgbInputDatepicker,
+    other: NgbInputDatepicker,
+    controlName: 'startDate' | 'endDate'
+  ) {
+    const value = this.form.controls[controlName].value as NgbDateStruct | null;
+  
+    // close the other picker no matter what
+    if (other?.isOpen()) other.close();
+  
+    // open this picker if needed
+    if (!dp.isOpen()) dp.open();
+  
+    // navigate to selected month/year
+    if (value?.year && value?.month) {
+      dp.navigateTo({ year: value.year, month: value.month });
+    }
+  }  
 
   private addDaysIso(iso: string, days: number): string {
     const d = new Date(iso);
@@ -106,21 +128,21 @@ export class WorkOrderFormComponent implements OnChanges {
     };
   }
 
-  private formatStruct(s: NgbDateStruct | null): string {
-    if (!s) return '';
-    const mm = String(s.month).padStart(2, '0');
-    const dd = String(s.day).padStart(2, '0');
-    const yyyy = String(s.year);
-    return `${mm}/${dd}/${yyyy}`;
+  private structToYmd(d: NgbDateStruct | null): string {
+    if (!d) return '';
+    const mm = String(d.month).padStart(2, '0');
+    const dd = String(d.day).padStart(2, '0');
+    return `${d.year}-${mm}-${dd}`;
   }
   
-  get startDisplay(): string {
-    return this.formatStruct(this.form.controls.startDate.value);
+  get startDisplay() {
+    return this.structToYmd(this.form.controls.startDate.value);
   }
   
-  get endDisplay(): string {
-    return this.formatStruct(this.form.controls.endDate.value);
+  get endDisplay() {
+    return this.structToYmd(this.form.controls.endDate.value);
   }
+  
   
   onStartPicked(date: NgbDateStruct) {
     this.form.controls.startDate.setValue(date);

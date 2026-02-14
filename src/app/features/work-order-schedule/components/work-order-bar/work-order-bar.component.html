@@ -1,5 +1,6 @@
 <div
   class="bar"
+  [class.is-menu-open]="menuOpen"
   (click)="$event.stopPropagation()"
   [ngClass]="'status-' + order.status"
   [style.left.px]="left"
@@ -10,17 +11,13 @@
   <div class="bar__right">
     <span class="bar__status">{{ statusLabel }}</span>
 
-  <div class="bar__menuWrap"
-      [class.is-open]="menuOpen"
-      (click)="$event.stopPropagation()">
+    <div class="bar__menuWrap" [class.is-open]="menuOpen" [class.is-active]="menuOpen">
+      <button class="bar__menuBtn" type="button" (click)="toggleMenu($event)">•••</button>
 
-    <button class="bar__menuBtn" type="button" (click)="toggleMenu($event)">•••</button>
-
-    <div class="bar__menu" *ngIf="menuOpen" (click)="$event.stopPropagation()">
-      <button type="button" class="bar__menuItem" (click)="onEdit()">Edit</button>
-      <button type="button" class="bar__menuItem is-delete" (click)="onDelete()">Delete</button>
+      <div class="bar__menu" *ngIf="menuOpen" (click)="$event.stopPropagation()">
+        <button type="button" class="bar__menuItem" (click)="onEdit($event)">Edit</button>
+        <button type="button" class="bar__menuItem is-delete" (click)="onDelete($event)">Delete</button>
+      </div>
     </div>
-  </div>
-
   </div>
 </div>

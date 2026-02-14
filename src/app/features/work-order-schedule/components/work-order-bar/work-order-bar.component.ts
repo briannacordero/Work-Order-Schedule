@@ -1,4 +1,4 @@
-import { Component, EventEmitter, HostListener, Input, Output, ElementRef } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { WorkOrder } from '../../../../models/work-order.model';
 
@@ -14,19 +14,12 @@ export class WorkOrderBarComponent {
   @Input() left = 0;
   @Input() width = 0;
 
+  @Input() menuOpen = false;
+
   @Output() edit = new EventEmitter<WorkOrder>();
   @Output() delete = new EventEmitter<WorkOrder>();
 
-  @HostListener('document:click')
-  closeMenu() {
-    this.menuOpen = false;
-  }
-
-  @HostListener('document:click', ['$event'])
-  onDocumentClick(event: MouseEvent) {
-    const clickedInside = this.elRef.nativeElement.contains(event.target as Node);
-    if (!clickedInside) this.menuOpen = false;
-  }
+  @Output() menuToggle = new EventEmitter<WorkOrder>();
 
   get statusLabel(): string {
     switch (this.order.status) {
@@ -34,25 +27,22 @@ export class WorkOrderBarComponent {
       case 'in-progress': return 'In progress';
       case 'complete': return 'Complete';
       case 'blocked': return 'Blocked';
+      default: return '';
     }
   }
-  
-  menuOpen = false;
-
-  constructor(private elRef: ElementRef<HTMLElement>) {}
 
   toggleMenu(event: MouseEvent) {
     event.stopPropagation();
-    this.menuOpen = !this.menuOpen;
+    this.menuToggle.emit(this.order);
   }
 
-  onEdit() {
-    this.menuOpen = false;
+  onEdit(event?: MouseEvent) {
+    event?.stopPropagation();
     this.edit.emit(this.order);
   }
 
-  onDelete() {
-    this.menuOpen = false;
+  onDelete(event?: MouseEvent) {
+    event?.stopPropagation();
     this.delete.emit(this.order);
   }
 }

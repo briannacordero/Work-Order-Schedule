@@ -51,26 +51,51 @@ export class TimelineViewportComponent implements OnChanges {
   selectedOrder?: WorkOrder;
   createContext?: { workCenterId: string; startDateIso: string };
 
+  openMenuOrderId: string | number | null = null;
+
+toggleOrderMenu(order: any) {
+  // adjust if your WorkOrder id field name differs
+  const id = order.id;
+  this.openMenuOrderId = this.openMenuOrderId === id ? null : id;
+}
+
+openMenuId: string | number | null = null;
+
+onToggleMenu(orderId: string | number) {
+  this.openMenuId = this.openMenuId === orderId ? null : orderId;
+}
+
+closeMenus() {
+  this.openMenuOrderId = null;
+}
+
   onClosePanel() {
+    this.closeMenus();
     this.panelOpen = false;
     this.selectedOrder = undefined;
     this.createContext = undefined;
   }
 
   onEditOrder(order: WorkOrder) {
+    this.closeMenus();
     this.editOrder.emit(order);
   }
+
   onSaveOrder(order: WorkOrder) {
     const exists = this.orders.some(o => o.id === order.id);
   
+    debugOverlaps(order, this.orders);
+
     this.orders = exists
       ? this.orders.map(o => (o.id === order.id ? { ...order } : o))
       : [...this.orders, order];
   
     this.persistOrders();
   
-    // close panel if you have it; otherwise remove this line
+    this.closeMenus();
     this.panelOpen = false;
+    this.selectedOrder = undefined;
+    this.createContext = undefined;
   }
   
   
@@ -162,6 +187,28 @@ private persistOrders(): void {
       return;
     }
   }
+
+  jumpToNow() {
+    const scroller = this.timelineScroll?.nativeElement;
+    if (!scroller) return;
+  
+    // determine col width from DOM (works for day/week/month)
+    const firstCell = scroller.querySelector('.timeline__header .timeline__cell') as HTMLElement | null;
+    const colWidth = firstCell?.offsetWidth ?? 80;
+  
+    const idx = this.currentColIndex ?? 0;
+  
+    const targetLeft = Math.max(
+      0,
+      idx * colWidth - scroller.clientWidth / 2 + colWidth / 2
+    );
+  
+    scroller.scrollTo({ left: targetLeft, behavior: 'smooth' });
+  
+    // if you have these fields in viewport
+    this.showCurrentTag = true;
+  }
+  
   
   private shiftWindow(deltaCols: number) {
     if (!this.timelineScroll) return;
@@ -257,7 +304,6 @@ private persistOrders(): void {
     console.log('Row click create:', wc.id);
 
   }  
-
 
   getOrdersForCenter(workCenterId: string): WorkOrder[] {
     return this.orders.filter(
@@ -379,3 +425,49 @@ private persistOrders(): void {
   }  
   
 }
+
+type OrderLike = { id: string; workCenterId: any; startDate: string; endDate: string; name?: string };
+
+function toDayKey(iso: string) {
+  // Works for "YYYY-MM-DD" or full ISO. Normalizes to YYYY-MM-DD.
+  return iso.slice(0, 10);
+}
+
+function overlaps(aStart: string, aEnd: string, bStart: string, bEnd: string) {
+  const A0 = toDayKey(aStart);
+  const A1 = toDayKey(aEnd);
+  const B0 = toDayKey(bStart);
+  const B1 = toDayKey(bEnd);
+
+  // Inclusive overlap (counts touching endpoints as overlap)
+  return A0 <= B1 && B0 <= A1;
+}
+
+function debugOverlaps(newOrder: OrderLike, orders: OrderLike[]) {
+  const nWC = String(newOrder.workCenterId);
+  const n0 = toDayKey(newOrder.startDate);
+  const n1 = toDayKey(newOrder.endDate);
+
+  console.group("OVERLAP DEBUG");
+  console.log("NEW:", { id: newOrder.id, wc: newOrder.workCenterId, n0, n1 });
+
+  const candidates = orders
+    .filter(o => String(o.workCenterId) === nWC)
+    .filter(o => o.id !== newOrder.id);
+
+  console.log("Candidates same WC (excluding self):", candidates.length);
+
+  for (const o of candidates) {
+    const o0 = toDayKey(o.startDate);
+    const o1 = toDayKey(o.endDate);
+    const hit = overlaps(n0, n1, o0, o1);
+
+    console.log(
+      hit ? "❌ OVERLAP" : "✅ ok",
+      { id: o.id, name: o.name, wc: o.workCenterId, o0, o1 }
+    );
+  }
+
+  console.groupEnd();
+}
+

@@ -13,7 +13,7 @@
       </div>
   
       <div class="form__actions">
-        <button type="button" class="btn btn-link" (click)="onCancel()">Cancel</button>
+        <button type="button" class="btn btn-cancel" (click)="onCancel()">Cancel</button>
         <button type="button" class="btn btn-primary" (click)="onSubmit()">
           {{ mode === 'edit' ? 'Save' : 'Create' }}
         </button>
@@ -53,12 +53,12 @@
       <div class="date-input">
         <input
         class="form-control"
-        placeholder="MM/DD/YYYY"
+        placeholder="YYYY-MM-DD"
         [value]="endDisplay"
         ngbDatepicker
         #endDp="ngbDatepicker"
         (dateSelect)="onEndPicked($event)"
-        (click)="endDp.toggle()"
+        (click)="openPicker(endDp, startDp, 'endDate')"
         readonly
       />
       <small class="text-danger" *ngIf="form.controls.endDate.touched && form.controls.endDate.invalid">
@@ -71,14 +71,14 @@
       <div class="date-input">
         <input
         class="form-control"
-        placeholder="MM/DD/YYYY"
+        placeholder="YYYY-MM-DD"
         [value]="startDisplay"
         ngbDatepicker
         #startDp="ngbDatepicker"
         (dateSelect)="onStartPicked($event)"
-        (click)="startDp.toggle()"
+        (click)="openPicker(startDp, endDp, 'startDate')"
         readonly
-      />
+      />      
       <small class="text-danger" *ngIf="form.controls.startDate.touched && form.controls.startDate.invalid">
         Start date is required.
       </small>
