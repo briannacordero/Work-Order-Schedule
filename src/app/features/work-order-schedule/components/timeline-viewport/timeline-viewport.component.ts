@@ -167,6 +167,15 @@ private persistOrders(): void {
     const el = this.timelineScroll.nativeElement;
     el.scrollLeft = Math.max(0, x - el.clientWidth / 3);
   }
+
+  private dateKey(d: Date): string {
+    // local date key, no timezone surprises
+    const y = d.getFullYear();
+    const m = String(d.getMonth() + 1).padStart(2, '0');
+    const day = String(d.getDate()).padStart(2, '0');
+    return `${y}-${m}-${day}`;
+  }
+  
   
 
   onScroll() {
@@ -223,9 +232,14 @@ private persistOrders(): void {
   
     this.windowStart = newStart;
     this.columns = this.timeline.buildColumnsWindow(this.windowStart, this.timescale, this.windowCols);
-    this.updateCurrentMarkers();    
-  
+
+    queueMicrotask(() => {
+      this.syncColWidthFromDom();
+      this.updateCurrentMarkers();
+    });
+    
     el.scrollLeft += deltaCols * this.colWidth;
+    
   }
   
 
@@ -244,19 +258,55 @@ private persistOrders(): void {
       this.windowCols
     );
   
-    this.updateCurrentMarkers(); // 👈 ADD THIS LINE HERE
+    // IMPORTANT: wait until DOM updates, then measure width, then compute markers
+    queueMicrotask(() => {
+      this.syncColWidthFromDom();
+      this.updateCurrentMarkers();
+    });
   }
   
 
+  private syncColWidthFromDom(): void {
+    const scroller = this.timelineScroll?.nativeElement;
+    if (!scroller) return;
+  
+    const firstCell = scroller.querySelector(
+      '.timeline__header .timeline__cell'
+    ) as HTMLElement | null;
+  
+    const w = firstCell?.offsetWidth;
+    if (w && w > 0) this.colWidth = w;
+  }  
+  
   private updateCurrentMarkers(): void {
-    // IMPORTANT: use a fixed "today" value (no time jitter)
     const today = new Date();
     this.now = new Date(today.getFullYear(), today.getMonth(), today.getDate());
   
-    const nowMs = this.now.getTime();
-    this.currentColIndex = this.columns.findIndex(
-      c => nowMs >= c.start.getTime() && nowMs < c.end.getTime()
-    );
+    const nowKey = this.dateKey(this.now);
+  
+    this.currentColIndex = this.columns.findIndex(c => {
+      // For day/week/month columns, start is the anchor we care about
+      const startKey = this.dateKey(c.start);
+  
+      if (this.timescale === 'day') {
+        // each column is one day
+        return startKey === nowKey;
+      }
+  
+      if (this.timescale === 'week') {
+        // now is within [start, end] inclusive by date
+        const start = this.dateKey(c.start);
+        const end = this.dateKey(new Date(c.end.getFullYear(), c.end.getMonth(), c.end.getDate() - 1)); 
+        // assumes c.end is exclusive (start of next period)
+        return nowKey >= start && nowKey <= end;
+      }
+  
+      // month: match month+year of column start
+      return (
+        c.start.getFullYear() === this.now.getFullYear() &&
+        c.start.getMonth() === this.now.getMonth()
+      );
+    });
   
     this.showCurrentTag = this.currentColIndex >= 0;
   
@@ -271,14 +321,23 @@ private persistOrders(): void {
       return;
     }
   
-    this.currentTagLeftPx = this.currentColIndex * this.colWidth + this.colWidth / 2;
-    this.currentLineLeftPx = this.timeline.dateToX(this.now, this.columns, this.colWidth);
-  }
+    const colStartX = this.currentColIndex * this.colWidth;
+
+    const TAG_OFFSET = 28;
+    this.currentTagLeftPx = colStartX + TAG_OFFSET;
+
+    this.currentLineLeftPx = colStartX;
+    
+  }  
   
 
-  private toISODate(d: Date): string {
-    return d.toISOString().slice(0, 10);
+  private toISODateLocal(d: Date): string {
+    const y = d.getFullYear();
+    const m = String(d.getMonth() + 1).padStart(2, '0');
+    const day = String(d.getDate()).padStart(2, '0');
+    return `${y}-${m}-${day}`;
   }
+  
 
   onRowSelect(wcId: string) {
     this.selectWorkCenter.emit(wcId);
@@ -298,7 +357,7 @@ private persistOrders(): void {
   
     this.createOrder.emit({
       workCenterId: wc.id,
-      startDateIso: clickedDate.toISOString().slice(0, 10),
+      startDateIso: this.dateKey(clickedDate),
     });
 
     console.log('Row click create:', wc.id);

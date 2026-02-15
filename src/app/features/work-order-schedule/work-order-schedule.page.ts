@@ -29,24 +29,28 @@ export class WorkOrderSchedulePageComponent implements OnInit {
   private loadOrders(): WorkOrder[] {
     try {
       const raw = localStorage.getItem(this.STORAGE_KEY);
-      if (!raw) return [...WORK_ORDERS];
-
-      const parsed = JSON.parse(raw) as WorkOrder[];
+      if (!raw) return [...WORK_ORDERS]; // first run fallback
+  
+      const parsed = JSON.parse(raw);
+  
       if (!Array.isArray(parsed)) return [...WORK_ORDERS];
-
-      // minimal validation
-      return parsed.filter(o =>
+  
+      const normalized = (parsed as any[]).filter(o =>
         typeof o?.id === 'string' &&
         typeof o?.name === 'string' &&
         typeof o?.workCenterId === 'string' &&
         typeof o?.status === 'string' &&
         typeof o?.startDate === 'string' &&
         typeof o?.endDate === 'string'
-      );
+      ) as WorkOrder[];
+  
+      // ✅ IMPORTANT: if storage is empty/invalid, re-seed sample data
+      return normalized.length ? normalized : [...WORK_ORDERS];
     } catch {
       return [...WORK_ORDERS];
     }
   }
+  
 
   private persistOrders(): void {
     try {

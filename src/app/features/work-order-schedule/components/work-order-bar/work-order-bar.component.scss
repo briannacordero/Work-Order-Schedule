@@ -2,7 +2,8 @@
 
 .bar {
   position: absolute;
-  top: 30%;
+  top: 0;
+  margin-top: 8px;
   height: var(--bar-height, 32px);
   border-radius: var(--bar-radius, 10px);
   padding: 0 10px;
@@ -177,10 +178,9 @@
   &:hover {
     background: rgba(3, 9, 41, 0.04);
   }
-}
-
-.bar__menuItem.is-delete {
-  color: #3E40DB; 
+  &.is-delete {
+    color: #3E40DB !important; 
+  }
 }
 
 

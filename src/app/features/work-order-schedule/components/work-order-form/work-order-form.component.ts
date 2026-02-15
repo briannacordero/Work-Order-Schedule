@@ -128,20 +128,24 @@ export class WorkOrderFormComponent implements OnChanges {
     };
   }
 
-  private structToYmd(d: NgbDateStruct | null): string {
-    if (!d) return '';
-    const mm = String(d.month).padStart(2, '0');
-    const dd = String(d.day).padStart(2, '0');
-    return `${d.year}-${mm}-${dd}`;
+  private formatDisplay(date: NgbDateStruct): string {
+    const mm = String(date.month).padStart(2, '0');
+    const dd = String(date.day).padStart(2, '0');
+    const yyyy = date.year;
+  
+    return `${mm}.${dd}.${yyyy}`;
   }
   
-  get startDisplay() {
-    return this.structToYmd(this.form.controls.startDate.value);
+  get startDisplay(): string {
+    const value = this.form.controls.startDate.value;
+    return value ? this.formatDisplay(value) : '';
   }
   
-  get endDisplay() {
-    return this.structToYmd(this.form.controls.endDate.value);
+  get endDisplay(): string {
+    const value = this.form.controls.endDate.value;
+    return value ? this.formatDisplay(value) : '';
   }
+  
   
   
   onStartPicked(date: NgbDateStruct) {

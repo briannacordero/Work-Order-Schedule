@@ -46,7 +46,7 @@
             class="timeline__row"
             *ngFor="let wc of workCenters"
             (click)="onRowClick($event, wc)"
-          >          
+            >          
               <div class="timeline__cell" *ngFor="let col of columns"></div>
           
               <app-work-order-bar

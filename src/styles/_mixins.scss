@@ -90,8 +90,8 @@
   }  
   
   /* TOOLTIP */
-  @mixin tooltip($bg: #111827, $color: #fff) {
-    position: absolute;
+  @mixin tooltip($bg: #687196, $color: #fff) {
+    position: relative;
     background: $bg;
     color: $color;
     font-size: 12px;
