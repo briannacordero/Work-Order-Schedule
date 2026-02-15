@@ -44,7 +44,7 @@ export class WorkOrderSchedulePageComponent implements OnInit {
         typeof o?.endDate === 'string'
       ) as WorkOrder[];
   
-      // ✅ IMPORTANT: if storage is empty/invalid, re-seed sample data
+      // IMPORTANT: if storage is empty/invalid, re-seed sample data
       return normalized.length ? normalized : [...WORK_ORDERS];
     } catch {
       return [...WORK_ORDERS];
@@ -91,7 +91,7 @@ export class WorkOrderSchedulePageComponent implements OnInit {
   
     this.panelMode = 'create';
     this.selectedOrder = undefined;
-    this.createContext = { workCenterId }; // no startDateIso at all
+    this.createContext = { workCenterId }; 
     this.panelOpen = true;
   }  
 
@@ -125,7 +125,7 @@ export class WorkOrderSchedulePageComponent implements OnInit {
       : [...this.orders, order];
 
     this.persistOrders();
-    this.onClosePanel?.(); // if you have it
-    this.panelOpen = false; // if you use this pattern
+    this.onClosePanel?.();
+    this.panelOpen = false;
   }
 }

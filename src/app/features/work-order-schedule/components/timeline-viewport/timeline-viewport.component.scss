@@ -13,10 +13,8 @@ $colWidth: 113px;
   min-height: 520px;
 
   @include mx.surface(var(--radius-md), $border: true, $shadow: false);
-
-  // &.is-month {
-  //   --row-height: 72px;
-  // }
+  border-radius: 0;
+  
 }
 
 /* LEFT */
@@ -134,7 +132,7 @@ $colWidth: 113px;
 }
 
 .timeline__row:hover .timeline__cell:hover {
-  outline: 1px solid rgba(91, 92, 226, 0.45); /* could token this later */
+  outline: 1px solid rgba(91, 92, 226, 0.45);
   outline-offset: -1px;
   z-index: 30;
   border-radius: 10px;
@@ -205,7 +203,7 @@ $colWidth: 113px;
   top: 0;
   bottom: 0;
   width: 2px;
-  background: rgba(91, 92, 226, 0.35); /* could token this later */
+  background: rgba(91, 92, 226, 0.35);
   z-index: 2;
   pointer-events: none;
 }

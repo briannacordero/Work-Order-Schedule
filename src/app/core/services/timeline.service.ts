@@ -15,7 +15,6 @@ export class TimelineService {
   }
 
   getVisibleRange(center: Date, timescale: Timescale): { start: Date; end: Date } {
-    // Pick reasonable defaults from the spec
     if (timescale === 'day') {
       const today = new Date();
       const start = this.startOfDay(this.addDays(today, -7));
@@ -123,7 +122,7 @@ function buildDayColumns(start: Date, end: Date): TimelineColumn[] {
     cols.push({
       start: d,
       end: next,
-      label: formatDayLabel(d), // e.g. "Aug 23"
+      label: formatDayLabel(d),
     });
     d = next;
   }
@@ -140,7 +139,7 @@ function buildWeekColumns(start: Date, end: Date): TimelineColumn[] {
     cols.push({
       start: d,
       end: next,
-      label: formatWeekLabel(d), // e.g. "Wk of Aug 19"
+      label: formatWeekLabel(d),
     });
     d = next;
   }
@@ -157,7 +156,7 @@ function buildMonthColumns(start: Date, end: Date): TimelineColumn[] {
     cols.push({
       start: d,
       end: next,
-      label: formatMonthLabel(d), // e.g. "Aug 2024"
+      label: formatMonthLabel(d),
     });
     d = next;
   }
@@ -169,8 +168,7 @@ function startOfDay(d: Date): Date {
 }
 
 function startOfWeek(d: Date): Date {
-  // Monday-start week
-  const day = d.getDay(); // 0=Sun,1=Mon...
+  const day = d.getDay();
   const diff = (day === 0 ? -6 : 1) - day;
   return startOfDay(addDays(d, diff));
 }

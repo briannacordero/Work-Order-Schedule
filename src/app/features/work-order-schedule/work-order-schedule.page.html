@@ -13,12 +13,18 @@
       </div>
 
       <button
-        *ngIf="timescale === 'day' || timescale === 'week'"
+        *ngIf="timescale === 'day' || timescale === 'week' || timescale === 'month'"
         class="btn-jump"
         type="button"
         (click)="viewport.jumpToNow()"
       >
-        Current {{ timescale === 'week' ? 'Week' : 'Day' }}
+        Current   {{
+          timescale === 'day'
+            ? 'Day'
+            : timescale === 'week'
+            ? 'Week'
+            : 'Month'
+        }}
       </button>
     </div>
   </header>

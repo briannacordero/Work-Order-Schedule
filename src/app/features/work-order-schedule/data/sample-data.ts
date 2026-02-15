@@ -7,11 +7,11 @@ export const WORK_CENTERS: WorkCenter[] = [
   { id: 'wc-3', name: 'Assembly Station' },
   { id: 'wc-4', name: 'Quality Control' },
   { id: 'wc-5', name: 'Genesis Hardware' },
-  { id: 'wc-6', name: 'Rodriques Electrics' },
-  { id: 'wc-7', name: 'Konsulting Inc' },
-  { id: 'wc-8', name: 'McMarrow Distribution' },
-  { id: 'wc-9', name: 'Spartan Manufacturing' },
-  { id: 'wc-10', name: 'Packaging Line' },
+  { id: 'wc-6', name: 'Molding Line 3' },
+  { id: 'wc-7', name: 'Precision CNC Cell' },
+  { id: 'wc-8', name: 'Final Assembly Line B' },
+  { id: 'wc-9', name: 'Surface Finishing Station' },
+  { id: 'wc-10', name: 'Packaging & Palletizing Line' },
 ];
 
 export const WORK_ORDERS: WorkOrder[] = [
@@ -20,7 +20,7 @@ export const WORK_ORDERS: WorkOrder[] = [
     name: 'Order Alpha',
     workCenterId: 'wc-1',
     status: 'in-progress',
-    startDate: '2026-06-15',
+    startDate: '2026-05-15',
     endDate: '2026-08-20',
   },
   {
@@ -28,8 +28,8 @@ export const WORK_ORDERS: WorkOrder[] = [
     name: 'Order Beta',
     workCenterId: 'wc-1',
     status: 'complete',
-    startDate: '2026-03-04',
-    endDate: '2026-05-27',
+    startDate: '2026-01-04',
+    endDate: '2026-05-10',
   },
   {
     id: 'wo-3',
@@ -44,7 +44,7 @@ export const WORK_ORDERS: WorkOrder[] = [
     name: 'Order Delta',
     workCenterId: 'wc-3',
     status: 'blocked',
-    startDate: '2026-04-19',
+    startDate: '2026-02-19',
     endDate: '2026-07-28',
   },
   {
@@ -52,8 +52,8 @@ export const WORK_ORDERS: WorkOrder[] = [
     name: 'Order Epsilon',
     workCenterId: 'wc-2',
     status: 'in-progress',
-    startDate: '2026-07-18',
-    endDate: '2026-11-03',
+    startDate: '2026-02-18',
+    endDate: '2026-06-03',
   },
   {
     id: 'wo-6',
@@ -84,7 +84,7 @@ export const WORK_ORDERS: WorkOrder[] = [
     name: 'Order Iota',
     workCenterId: 'wc-6',
     status: 'complete',
-    startDate: '2026-04-03',
+    startDate: '2026-01-25',
     endDate: '2026-06-06',
   },
   {

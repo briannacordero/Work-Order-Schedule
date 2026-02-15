@@ -54,7 +54,6 @@ export class TimelineViewportComponent implements OnChanges {
   openMenuOrderId: string | number | null = null;
 
 toggleOrderMenu(order: any) {
-  // adjust if your WorkOrder id field name differs
   const id = order.id;
   this.openMenuOrderId = this.openMenuOrderId === id ? null : id;
 }
@@ -137,7 +136,6 @@ private persistOrders(): void {
   try {
     localStorage.setItem(this.STORAGE_KEY, JSON.stringify(this.orders));
   } catch {
-    // ignore quota / private mode errors for now
   }
 }
 
@@ -214,7 +212,7 @@ private persistOrders(): void {
   
     scroller.scrollTo({ left: targetLeft, behavior: 'smooth' });
   
-    // if you have these fields in viewport
+    // if fields in viewport
     this.showCurrentTag = true;
   }
   
@@ -285,7 +283,6 @@ private persistOrders(): void {
     const nowKey = this.dateKey(this.now);
   
     this.currentColIndex = this.columns.findIndex(c => {
-      // For day/week/month columns, start is the anchor we care about
       const startKey = this.dateKey(c.start);
   
       if (this.timescale === 'day') {
@@ -294,10 +291,8 @@ private persistOrders(): void {
       }
   
       if (this.timescale === 'week') {
-        // now is within [start, end] inclusive by date
         const start = this.dateKey(c.start);
         const end = this.dateKey(new Date(c.end.getFullYear(), c.end.getMonth(), c.end.getDate() - 1)); 
-        // assumes c.end is exclusive (start of next period)
         return nowKey >= start && nowKey <= end;
       }
   
@@ -324,8 +319,8 @@ private persistOrders(): void {
     const colStartX = this.currentColIndex * this.colWidth;
 
     const TAG_OFFSET = 28;
-    this.currentTagLeftPx = colStartX + TAG_OFFSET;
-
+    
+    this.currentTagLeftPx = this.timescale === 'day' ? colStartX + TAG_OFFSET : colStartX + 50;
     this.currentLineLeftPx = colStartX;
     
   }  
@@ -391,7 +386,7 @@ private persistOrders(): void {
 
   private startOfWeek(d: Date): Date {
     // Monday-start week
-    const day = d.getDay(); // 0=Sun,1=Mon...
+    const day = d.getDay();
     const diff = (day === 0 ? -6 : 1) - day;
     return this.startOfDay(this.addDays(d, diff));
   }
@@ -412,7 +407,7 @@ private persistOrders(): void {
 
   // tune per view
   private windowCols = 90;   // day default
-  private shiftCols = 30;    // how much we shift when near edge
+  private shiftCols = 30;    // how much shift when near edge
   private edgeThresholdPx = 300; // when to shift
 
   private configureWindowForScale() {
@@ -423,7 +418,7 @@ private persistOrders(): void {
       this.windowCols = 26;  // ~6 months
       this.shiftCols = 13;   // ~3 months
     } else {
-      this.windowCols = 12;  // months: show whole year (cheap)
+      this.windowCols = 12;  // months: show whole year
       this.shiftCols = 0;
     }
   }  
